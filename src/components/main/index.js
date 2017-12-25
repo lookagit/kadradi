@@ -56,6 +56,7 @@ import Stats from 'components/stats';
 import Styles from 'components/styles';
 
 import GoogleMap from '../pages/googleMap';
+import Login from '../pages/login';
 
 // Styles
 import css from './main.scss';
@@ -83,10 +84,12 @@ export default () => (
     <ul>
       <li><Link to="/">Home</Link></li>
       <li><Link to="/googlemap">Map</Link></li>
+      <li><Link to="/login">Login</Link></li>
     </ul>
     <Switch>
       <Route exact path="/" component={Home} />
       <Route path="/googlemap" component={GoogleMap} />
+      <Route path="/login" component={Login} />
       <Route component={WhenNotFound} />
     </Switch>
   </div>
