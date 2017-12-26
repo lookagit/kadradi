@@ -3,46 +3,6 @@ import Sequelize from 'sequelize';
 
 const db = new Sequelize('postgres://kadradiuser:jw8s0F4122Pi&&2@kadradipostgres.cjx5vc7fbujv.eu-west-1.rds.amazonaws.com/kadradi');
 
-
-const Role = db.define('roles', {
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  priority: {
-    type: Sequelize.INTEGER,
-    allowNull: false
-  }
-});
-
-const UserType = db.define('userType', {
-  userType: {
-    type: Sequelize.STRING,
-    allowNull: false
-  }
-});
-const PersonBadges = db.define('personBadges', {
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  iconUrl: {
-    type: Sequelize.STRING,
-    allowNull: false
-  }
-});
-
-const PersonFiles = db.define('personFiles', {
-  fileUrl: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  desc: {
-    type: Sequelize.STRING,
-    allowNull: false
-  }
-});
-
 const Person = db.define('person', {
   username: {
     type: Sequelize.STRING,
@@ -73,10 +33,51 @@ const Person = db.define('person', {
     type: Sequelize.STRING
   }
 });
-Person.hasOne(Role);
-Person.hasOne(UserType);
-Person.hasMany(PersonBadges);
-Person.hasMany(PersonFiles);
+
+const UserType = db.define('userType', {
+  userType: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
+});
+UserType.hasOne(Person);
+
+const PersonBadges = db.define('personBadges', {
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  iconUrl: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
+});
+PersonBadges.hasMany(Person);
+
+const PersonFiles = db.define('personFiles', {
+  fileUrl: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  desc: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
+});
+PersonFiles.hasMany(Person);
+
+const Role = db.define('roles', {
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  priority: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  }
+});
+Role.hasMany(Person);
+
 
 const UserProfile = db.define('userProfile', {
   profileImageUrl: {
@@ -90,12 +91,6 @@ const UserProfile = db.define('userProfile', {
 UserProfile.belongsTo(Person);
 
 
-const ObjectCategorie = db.define('objectCategories', {
-  name: {
-    type: Sequelize.STRING,
-    allowNull:false
-  }
-});
 
 const ObjectCl = db.define('objectCl', {
   name: {
@@ -107,17 +102,17 @@ const ObjectCl = db.define('objectCl', {
     allowNull:false
   }
 });
-ObjectCl.hasOne(ObjectCategorie);
-// ObjectCl.hasOne(Person);
+Person.hasOne(ObjectCl);
 
-const ObjectPhones = db.define('objectPhones', {
-  desc: {
+const ObjectCategorie = db.define('objectCategories', {
+  name: {
     type: Sequelize.STRING,
-  },
-  number: {
-    type: Sequelize.STRING,
-  },
+    allowNull:false
+  }
 });
+ObjectCategorie.hasOne(ObjectCl);
+
+
 
 const ObjectInfo = db.define('objectInfo', {
   address: {
@@ -135,19 +130,117 @@ const ObjectInfo = db.define('objectInfo', {
   hasRestaurant: {
     type: Sequelize.BOOLEAN,
   },
-  address: {
+  popularBecauseOf: {
     type: Sequelize.STRING,
   }
 });
-ObjectInfo.belongsTo(ObjectCl);
-ObjectInfo.hasMany(ObjectPhones);
 
+ObjectInfo.belongsTo(ObjectCl);
+
+const ObjectPhones = db.define('objectPhones', {
+  desc: {
+    type: Sequelize.STRING,
+  },
+  number: {
+    type: Sequelize.STRING,
+  },
+});
+
+ObjectPhones.belongsTo(ObjectInfo);
+
+const ObjectAdditionalInfo = db.define('objectAdditionalInfo', {
+  info: {
+    type: Sequelize.STRING
+  }
+});
+ObjectAdditionalInfo.belongsTo(ObjectInfo);
+
+const ObjectRestaurantMenu = db.define('objectRestaurantMenu', {
+  menuUrl: {
+    type: Sequelize.STRING
+  }
+});
+ObjectRestaurantMenu.belongsTo(ObjectInfo);
+
+const ObjectWorkTime = db.define('objectWorkTime', {
+  isAllwaysOpened: {
+    type: Sequelize.BOOLEAN
+  }
+});
+
+ObjectWorkTime.belongsTo(ObjectCl);
+
+const ObjectWtMontoFri = db.define('objectWtMontoFri', {
+  opening: {
+    type: Sequelize.STRING
+  },
+  closing: {
+    type: Sequelize.STRING
+  }
+});
+ObjectWtMontoFri.hasOne(ObjectWorkTime);
+
+const ObjectWtSaturday = db.define('objectWtSaturday', {
+  opening: {
+    type: Sequelize.STRING
+  },
+  closing: {
+    type: Sequelize.STRING
+  }
+});
+ObjectWtSaturday.hasOne(ObjectWorkTime);
+
+const ObjectWtSunday = db.define('objectWtSunday', {
+  opening: {
+    type: Sequelize.STRING
+  },
+  closing: {
+    type: Sequelize.STRING
+  }
+});
+ObjectWtSunday.hasOne(ObjectWorkTime);
+
+const ObjectWtCustom = db.define('objectWtCustom', {
+  opening: {
+    type: Sequelize.STRING
+  },
+  closing: {
+    type: Sequelize.STRING
+  },
+  day: {
+    type: Sequelize.INTEGER
+  },
+  date: {
+    type: Sequelize.DATE
+  }
+});
+ObjectWtCustom.hasOne(ObjectWorkTime);
+
+const ObjectFileCategory = db.define('objectFileCategory', {
+  category: {
+    type: Sequelize.STRING
+  },
+  desc: {
+    type: Sequelize.STRING
+  }
+});
+
+const ObjectFile = db.define('objectFile', {
+  fileUrl: {
+    type: Sequelize.STRING
+  },
+  desc: {
+    type: Sequelize.STRING
+  }
+});
+ObjectFile.belongsTo(ObjectCl);
+ObjectFileCategory.hasOne(ObjectFile);
 
 const PersonFavoriteObjects = db.define('personFavoriteObjects', {
 
 });
 PersonFavoriteObjects.belongsTo(Person);
-PersonFavoriteObjects.hasOne(ObjectCl)
+ObjectCl.hasOne(PersonFavoriteObjects);
 
 const FriendStatus = db.define('friendStatus', {
   status: {
@@ -243,17 +336,17 @@ const friendsRelationsArr = [
     friendsPersonId: 3
   },
 ]
-// db.sync().then(() => {
-//   PersonsArr.map(item => {
-//     return Person.create(item);
-//   });
-//   FriendStatusArr.map(item => {
-//     return FriendStatus.create(item);
-//   });
-//   return friendsRelationsArr.map(item => {
-//     return FriendsList.create(item);
-//   });
-// });
+db.sync().then(() => {
+  PersonsArr.map(item => {
+    return Person.create(item);
+  });
+  FriendStatusArr.map(item => {
+    return FriendStatus.create(item);
+  });
+  return friendsRelationsArr.map(item => {
+    return FriendsList.create(item);
+  });
+});
 
 
 export default db;
