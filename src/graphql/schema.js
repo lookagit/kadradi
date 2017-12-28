@@ -1,179 +1,214 @@
-// Schema for sample GraphQL server.
-
-// ----------------------
-// IMPORTS
-
-// GraphQL schema library, for building our GraphQL schema
 import {
-    GraphQLObjectType,
-    GraphQLString,
-    GraphQLSchema,
-    GraphQLInt,
-    GraphQLList
-  } from 'graphql';
-
-  import db from '../../db/db';
-
-  // ----------------------
-
-  // GraphQL can handle Promises from its `resolve()` calls, so we'll create a
-  // simple async function that returns a simple message.  In practice, `resolve()`
-  // will generally pull from a 'real' data source such as a database
-  async function getMessage() {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLNonNull,
+} from 'graphql';
+import db from '../../db/db';
+async function getMessage() {
+  return {
+    text: `Hello from the GraphQL server @ ${new Date()}`,
+  };
+}
+const Message = new GraphQLObjectType({
+  name: 'Message',
+  description: 'GraphQL server message',
+  fields() {
     return {
-      text: `Hello from the GraphQL server @ ${new Date()}`,
+      text: {
+        type: GraphQLString,
+        resolve(msg) {
+          return msg.text;
+        },
+      },
     };
-  }
+  },
+});
 
-  // Message type.  Imagine this like static type hinting on the 'message'
-  // object we're going to throw back to the user
-  const Message = new GraphQLObjectType({
-    name: 'Message',
-    description: 'GraphQL server message',
-    fields() {
-      return {
-        text: {
-          type: GraphQLString,
-          resolve(msg) {
-            return msg.text;
-          },
+const Person = new GraphQLObjectType({
+  name: 'Person',
+  description: 'Person Object',
+  fields() {
+    return {
+      id: {
+        type: GraphQLInt,
+        resolve(person) {
+          return person.id;
         },
-      };
-    },
-  });
-
-  const Person = new GraphQLObjectType({
-    name: 'Person',
-    description: 'Person Object',
-    fields() {
-      return {
-        id: {
-          type: GraphQLInt,
-          resolve(person) {
-            return person.id;
-          },
+      },
+      email: {
+        type: GraphQLString,
+        resolve(person) {
+          return person.email;
         },
-        email: {
-          type: GraphQLString,
-          resolve(person) {
-            return person.email;
-          },
-        },
-        friendsList: {
-            type: new GraphQLList(FriendsList),
-            resolve(person) {
-              //console.log("evo ovde ce to:");
-                return db.models.friendsList.findAll({
-                    where: {
-                      // personId: person.id
-                      [db.Op.or]: [{personId: person.id}, {friendsPersonId: person.id}]
-                    }
-                  });
-                // return db.models.friendsList.findAll({
-                //     where: {
-                //         personId: person.id,
-                //         $or: [
-                //             {
-                //                 friendsPersonId: {
-                //                     $eq: person.id
-                //                 }
-                //             }
-
-                //         ]
-                //     }
-                // })
-            }
+      },
+      firstName: {
+        type: GraphQLString,
+        resolve(person) {
+          return person.firstName;
         }
-      };
-    },
-  });
-
-
-  // const ListaPrijatelja = new GraphQLObjectType({
-  //   name: 'ListaPrijatelja',
-  //   description: 'Lista Prijatelja',
-  //   fields() {
-  //     return {
-  //       people: {
-  //         type: new GraphQLList(Person),
-  //         resolve(list) {
-
-  //         }
-  //       }
-  //     }
-  //   }
-  // });
-
-  const FriendsList = new GraphQLObjectType({
-    name: 'FriendsList',
-    description: 'Friends List',
-    fields() {
-        return{
-          persona: {
-            type: Person,
-            resolve(fl) {
-              return fl.getPerson();
+      },
+      lastName: {
+        type: GraphQLString,
+        resolve(person) {
+          return person.lastName;
+        }
+      },
+      facebookId: {
+        type: GraphQLString,
+        resolve(person) {
+          return person.facebook_id;
+        }
+      },
+      googleId: {
+        type: GraphQLString,
+        resolve(person) {
+          return person.google_id;
+        }
+      },
+      profileInfo: {
+        type: UserProfile,
+        async resolve(person) {
+          console.log(person.id);
+          let userProf = await db.models.userProfile.findAll({
+            where: {
+              personId: person.id,
             }
-          },
-          personaDruga: {
-            type: Person,
-            resolve(fl) {
-              return fl.getFriendssPersonId();
-            }
+          });
+          if(userProf.length) {
+            let [{dataValues}] = userProf;
+            return dataValues;
+          } else {
+            return {}
           }
-        };
+        }
+      }
+    };
+  },
+});
+
+const UserProfile = new GraphQLObjectType({
+  name: 'UserProfile',
+  description: 'User profile info. Image url and location',
+  fields() {
+    return {
+      profileImageUrl: {
+        type: GraphQLString,
+        resolve(profile) {
+          return profile.profileImageUrl;
+        }
+      },
+      location: {
+        type: GraphQLString,
+        resolve(profile) {
+          return profile.location;
+        }
+      } 
     }
-  });
+  }
+});
 
-
-
-  // Root query.  This is our 'public API'.
-  const Query = new GraphQLObjectType({
-    name: 'Query',
-    description: 'Root query object',
-    fields() {
-      return {
-        message: {
-          type: Message,
-          resolve() {
-            return getMessage();
-          },
+const FriendsList = new GraphQLObjectType({
+  name: 'FriendsList',
+  description: 'Friends List',
+  fields() {
+      return{
+        persona: {
+          type: Person,
+          resolve(fl) {
+            return fl.getPerson();
+          }
         },
-        people: {
-          type: new GraphQLList(Person),
-          args: {
-            id: {
-              type: GraphQLInt
-            },
-            email: {
-              type: GraphQLString
-            }
-          },
-          resolve(root, args) {
-            return db.models.person.findAll({where: args});
-          },
-        },
-        friendsList: {
-            type: new GraphQLList(FriendsList),
-            args: {
-                personId: {
-                    type: GraphQLInt
-                },
-                friendsPersonId: {
-                    type: GraphQLInt
-                }
-            },
-            resolve(root, args) {
-                return db.models.friendsList.findAll({where: args});
-            }
+        personaDruga: {
+          type: Person,
+          resolve(fl) {
+            return fl.getFriendssPersonId();
+          }
         }
       };
-    },
-  });
+  }
+});
 
-  // The resulting schema.  We insert our 'root' `Query` object, to tell our
-  // GraphQL server what to respond to.  We could also add a root `mutation`
-  // if we want to pass mutation queries that have side-effects (e.g. like HTTP POST)
-  export default new GraphQLSchema({
-    query: Query,
-  });
+
+
+// Root query.  This is our 'public API'.
+const Query = new GraphQLObjectType({
+  name: 'Query',
+  description: 'Root query object',
+  fields() {
+    return {
+      people: {
+        type: new GraphQLList(Person),
+        args: {
+          id: {
+            type: GraphQLInt
+          },
+          email: {
+            type: GraphQLString
+          }
+        },
+        resolve(root, args) {
+          return db.models.person.findAll({where: args});
+        },
+      },
+    };
+  },
+});
+
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  description: 'Mutation for mekice.com',
+  fields() {
+    return {
+      updateOrCreateUser: {
+        type: Person,
+        args: {
+          email: {
+            type: GraphQLString,
+          },
+          FBID: {
+            type: GraphQLString,
+          },
+          GID: {
+            type: GraphQLString,
+          },
+          firstName: {
+            type: GraphQLString,
+          },
+          lastName: {
+            type: GraphQLString,
+          }
+        },
+        async resolve(root,{ email, FBID: facebook_id="", GID: google_id="", firstName, lastName, }) {
+          let create = await db.models.person.findOrCreate({
+            where: {
+              roleId: 1,
+              userTypeId: 1,
+              email,
+              firstName,
+              lastName,
+              facebook_id,
+              google_id,
+            }
+          })
+          console.log("Ja SAm Create ",create);
+          let [user] = create;
+          let {dataValues} = user;
+          return {id: dataValues.id};
+        }
+      },
+      createProfile: {
+        type: UserProfile,
+      },
+    }
+  }
+});
+// The resulting schema.  We insert our 'root' `Query` object, to tell our
+// GraphQL server what to respond to.  We could also add a root `mutation`
+// if we want to pass mutation queries that have side-effects (e.g. like HTTP POST)
+export default new GraphQLSchema({
+  query: Query,
+  mutation: Mutation,
+});

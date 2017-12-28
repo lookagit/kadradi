@@ -11,8 +11,6 @@ import PropTypes from 'prop-types';
 // entire app
 import createBrowserHistory from 'history/createBrowserHistory';
 
-// React Router
-import { Route, Redirect as ReactRouterRedirect } from 'react-router-dom';
 
 // ----------------------
 

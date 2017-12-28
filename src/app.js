@@ -18,38 +18,9 @@
 // Config API, for adding reducers and configuring our ReactQL app
 import config from 'kit/config';
 
-/* App */
-
-// Example counter reducer.  This simply increments the counter by +1
-import counterReducer from 'reducers/counter';
 
 // Main component -- i.e. the 'root' React component in our app
 import Main from 'components/main';
-
-// Init global styles.  These will be added to the resulting CSS automatically
-// without any class hashing.  Use this to include default or framework CSS.
-import './styles.global.css';
-
-// ----------------------
-
-/* REDUCERS */
-
-// Add our custom `counter` reducer, with the initial state as a zero count.
-// Note:  The initial state (3rd param) will automatically be wrapped in
-// `seamless-immutable` by the kit's Redux init code, so plain objects are
-// automatically immutable by default
-config.addReducer('counter', counterReducer, { count: 0 });
-
-/* GRAPHQL */
-
-// Enable the internal GraphQL server.  This will do two things:
-//
-// 1.  On the server, it will set-up the necessary route handlers to 'listen'
-// to incoming GraphQL requests on `/graphql`, as well as (by default) set-up
-// the GraphiQL IDE
-//
-// 2.  On the client, it will append the correct server URL so that we can
-// call the ReactQL host properly, and let the server handle our requests
 config.enableGraphQLServer();
 
 /* SERVER */
@@ -190,15 +161,7 @@ if (SERVER) {
   // ... and 'after' middleware, which runs after per-request instantiation.
   // Let's use the latter to add a custom header so we can see middleware in action
   config.addMiddleware(async (ctx, next) => {
-    ctx.set('Powered-By', ctx.engine); // <-- `ctx.engine` from `config.getKoaApp()` above!
-
-    // For the fun of it, let's demonstrate that we can fire Redux actions
-    // and it'll manipulate the state on the server side!  View the SSR version
-    // to see that the counter is now 1 and has been passed down the wire
-    ctx.store.dispatch({ type: 'INCREMENT_COUNTER' });
-
-    // Always return `next()`, otherwise the request won't 'pass' to the next
-    // middleware in the stack (likely, the React handler)
+    ctx.set('Powered-By', ctx.engine); 
     return next();
   });
 }
