@@ -185,19 +185,30 @@ const Mutation = new GraphQLObjectType({
           let create = await db.models.person.findOrCreate({
             where: {
               email,
-              firstName,
-              lastName,
-              facebook_id,
-              google_id,
             }
           })
-          console.log("Ja SAm Create ",create);
           if(create) {
-            let [user] = create;
+            let [user, isCreated] = create;
             let {dataValues} = user;
+            if(isCreated) {
+              console.log("NAPRAVISMO JUSERA")
+              let update = await db.models.person.update({
+                email,
+                firstName,
+                lastName,
+                facebook_id,
+                google_id,
+              }, {
+               where: {
+                 id: dataValues.id,
+               } 
+              })
+              if(update) {
+                return {id: dataValues.id};
+              }
+            } 
+            console.log("EVO GA STARI DOBRI JUSER", dataValues)
             return {id: dataValues.id};
-          } else {
-            console.log("JA SAM CREATE ", create);
           }
           
         }
