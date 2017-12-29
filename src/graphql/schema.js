@@ -181,7 +181,7 @@ const Mutation = new GraphQLObjectType({
             type: GraphQLString,
           }
         },
-        async resolve({ email, FBID: facebook_id="", GID: google_id="", firstName, lastName, }) {
+        async resolve(root,{ email, FBID: facebook_id="", GID: google_id="", firstName, lastName, }) {
           let create = await db.models.person.findOrCreate({
             where: {
               email,
