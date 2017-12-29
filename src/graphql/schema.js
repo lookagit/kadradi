@@ -181,7 +181,7 @@ const Mutation = new GraphQLObjectType({
             type: GraphQLString,
           }
         },
-        async resolve(root,{ email, FBID: facebook_id="", GID: google_id="", firstName, lastName, }) {
+        async resolve({ email, FBID: facebook_id="", GID: google_id="", firstName, lastName, }) {
           let create = await db.models.person.findOrCreate({
             where: {
               email,
@@ -192,9 +192,14 @@ const Mutation = new GraphQLObjectType({
             }
           })
           console.log("Ja SAm Create ",create);
-          let [user] = create;
-          let {dataValues} = user;
-          return {id: dataValues.id};
+          if(create) {
+            let [user] = create;
+            let {dataValues} = user;
+            return {id: dataValues.id};
+          } else {
+            console.log("JA SAM CREATE ", create);
+          }
+          
         }
       },
       createProfile: {
