@@ -4,11 +4,6 @@ import Sequelize from 'sequelize';
 const db = new Sequelize('postgres://kadradiuser:jw8s0F4122Pi&&2@kadradipostgres.cjx5vc7fbujv.eu-west-1.rds.amazonaws.com/kadradi');
 
 const Person = db.define('person', {
-  username: {
-    type: Sequelize.STRING,
-    allowNull: true,
-    unique: true
-  },
   password: {
     type: Sequelize.STRING
   },
@@ -336,7 +331,7 @@ const friendsRelationsArr = [
     friendsPersonId: 3
   },
 ]
-db.sync().then(() => {
+db.sync({force: true}).then(() => {
   PersonsArr.map(item => {
     return Person.create(item);
   });
