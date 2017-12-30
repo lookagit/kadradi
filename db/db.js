@@ -80,12 +80,18 @@ const UserProfile = db.define('userProfile', {
   },
   location: {
     type: Sequelize.STRING
-  }
+  },
+},
+{
+  indexes: [
+      {
+          unique: true,
+          fields: ['personId'],
+      }
+  ]
 });
 
-UserProfile.belongsTo(Person);
-
-
+Person.hasOne(UserProfile);
 
 const ObjectCl = db.define('objectCl', {
   name: {

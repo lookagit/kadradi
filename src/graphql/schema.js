@@ -159,7 +159,7 @@ const Query = new GraphQLObjectType({
 
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
-  description: 'Mutation for mekice.com',
+  description: 'Mutation for kadradi.com',
   fields() {
     return {
       updateOrCreateUser: {
@@ -191,7 +191,6 @@ const Mutation = new GraphQLObjectType({
             let [user, isCreated] = create;
             let {dataValues} = user;
             if(isCreated) {
-              console.log("NAPRAVISMO JUSERA")
               let update = await db.models.person.update({
                 email,
                 firstName,
@@ -205,9 +204,8 @@ const Mutation = new GraphQLObjectType({
               })
               if(update) {
                 return {id: dataValues.id};
-              }
+              } 
             } 
-            console.log("EVO GA STARI DOBRI JUSER", dataValues)
             return {id: dataValues.id};
           }
           
@@ -215,6 +213,22 @@ const Mutation = new GraphQLObjectType({
       },
       createProfile: {
         type: UserProfile,
+        args: {
+          id: {
+            type: GraphQLString,
+          },
+          imageUrl: {
+            type: GraphQLString,
+          },
+        },
+        async resolve(root, {id, imageUrl}) {
+          let image = await db.models.userProfile.upsert({personId: parseInt(id),profileImageUrl: imageUrl},{
+            where: {
+              personId: parseInt(id),
+            }
+          });
+          console.log("OVO JE IMAGE ", image);
+        }
       },
     }
   }
