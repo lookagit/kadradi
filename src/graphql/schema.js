@@ -222,11 +222,7 @@ const Mutation = new GraphQLObjectType({
           },
         },
         async resolve(root, {id, imageUrl}) {
-          let image = await db.models.userProfile.upsert({personId: parseInt(id),profileImageUrl: imageUrl},{
-            where: {
-              personId: parseInt(id),
-            }
-          });
+          let image = await db.models.userProfile.findOne({personId: parseInt(id)});
           console.log("OVO JE IMAGE ", image);
         }
       },
