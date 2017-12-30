@@ -215,7 +215,7 @@ const Mutation = new GraphQLObjectType({
         type: UserProfile,
         args: {
           id: {
-            type: GraphQLString,
+            type: GraphQLInt,
           },
           imageUrl: {
             type: GraphQLString,
@@ -223,7 +223,19 @@ const Mutation = new GraphQLObjectType({
         },
         async resolve(root, {id, imageUrl}) {
           let image = await db.models.userProfile.findOne({personId: parseInt(id)});
-          console.log("OVO JE IMAGE ", image);
+          if(image) {
+            return image;
+          } else {
+            createImgProfile = await db.models.userProfile.create({
+              profileImageUrl: imageUrl,
+              personId: id,
+            });
+            if(createImgProfile) {
+              return {
+                profileImageUrl: imageUrl,
+              }
+            } 
+          }
         }
       },
     }
