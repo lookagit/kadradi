@@ -226,13 +226,14 @@ const Mutation = new GraphQLObjectType({
           if(image) {
             return image;
           } else {
-            createImgProfile = await db.models.userProfile.create({
+            let createImgProfile = await db.models.userProfile.create({
               profileImageUrl: imageUrl,
               personId: id,
             });
             if(createImgProfile) {
               return {
                 profileImageUrl: imageUrl,
+                location: "",
               }
             } 
           }
