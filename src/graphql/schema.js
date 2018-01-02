@@ -239,6 +239,7 @@ const Mutation = new GraphQLObjectType({
               personId: id,
             });
             console.log("JEL IMAMO SAD ?!!? ", createImgProfile);
+            
             if(createImgProfile) {
               return {
                 profileImageUrl: imageUrl,
