@@ -222,15 +222,23 @@ const Mutation = new GraphQLObjectType({
           },
         },
         async resolve(root, {id, imageUrl}) {
-          let image = await db.models.userProfile.findOne({personId: parseInt(id)});
+          console.log("JA SAM ARGS ", id, imageUrl);
+          let image = await db.models.userProfile.findOne({
+            where: {
+              personId: id
+            }
+          });
+          console.log("JEL IMA IMAGE ", image);
           if(image) {
             return image;
           } else {
+            console.log("NEMAMO IMAGE BRT ");
             let createImgProfile = await db.models.userProfile.create({
               profileImageUrl: imageUrl,
               location: "",
               personId: id,
             });
+            console.log("JEL IMAMO SAD ?!!? ", createImgProfile);
             if(createImgProfile) {
               return {
                 profileImageUrl: imageUrl,
