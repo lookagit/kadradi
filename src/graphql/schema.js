@@ -7,6 +7,7 @@ import {
   GraphQLNonNull,
 } from 'graphql';
 import db from '../../db/db';
+
 async function getMessage() {
   return {
     text: `Hello from the GraphQL server @ ${new Date()}`,
@@ -71,17 +72,32 @@ const Person = new GraphQLObjectType({
       profileInfo: {
         type: UserProfile,
         async resolve(person) {
-          console.log(person.id);
-          let userProf = await db.models.userProfile.findAll({
+          let userProf = await db.models.userProfile.findOne({
             where: {
               personId: person.id,
             }
           });
-          if(userProf.length) {
-            let [{dataValues}] = userProf;
+          if(userProf) {
+            let {dataValues} = userProf;
             return dataValues;
           } else {
             return {}
+          }
+        }
+      },
+      profileLocation: {
+        type: UserLocation,
+        async resolve(person) {
+          let userLocation = await db.models.userLocation.findOne({
+            where: {
+              personId: person.id,
+            }
+          })
+          if(userLocation) {
+            let {dataValues} = userLocation;
+            return dataValues;
+          } else {
+            return {};
           }
         }
       }
@@ -100,16 +116,54 @@ const UserProfile = new GraphQLObjectType({
           return profile.profileImageUrl;
         }
       },
-      location: {
-        type: GraphQLString,
-        resolve(profile) {
-          return profile.location;
-        }
-      } 
     }
   }
 });
 
+const UserLocation = new GraphQLObjectType({
+  name: 'UserLocation',
+  description: 'User location info. accuracy, altitude, heading, latitude, longitude, speed',
+  fields() {
+    return {
+      accuracy: {
+        type: GraphQLInt,
+        resolve(location) {
+          return location.accuracy;
+        }
+      },
+      altitude: {
+        type: GraphQLInt,
+        resolve(location) {
+          return location.altitude;
+        }
+      },
+      heading: {
+        type: GraphQLFloat,
+        resolve(location) {
+          return location.heading;
+        }
+      },
+      latitude: {
+        type: GraphQLFloat,
+        resolve(location) {
+          return location.latitude
+        }
+      },
+      longitude: {
+        type: GraphQLFloat,
+        resolve(location) {
+          return location.longitude;
+        }
+      },
+      speed: {
+        type: GraphQLFloat,
+        resolve(location) {
+          return location.speed;
+        }
+      }
+    }
+  }
+})
 const FriendsList = new GraphQLObjectType({
   name: 'FriendsList',
   description: 'Friends List',
@@ -244,6 +298,9 @@ const Mutation = new GraphQLObjectType({
           }
         }
       },
+      addLocation: {
+
+      }
     }
   }
 });

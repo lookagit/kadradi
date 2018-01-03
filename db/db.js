@@ -83,15 +83,40 @@ const UserProfile = db.define('userProfile', {
   },
 },
 {
-  indexes: [
-      {
-          unique: true,
-          fields: ['personId'],
-      }
-  ]
+  indexes: [{
+    unique: true,
+    fields: ['personId'],
+  }]
 });
-
 Person.hasOne(UserProfile);
+
+const UserLocation = db.define('userLocation', {
+  accuracy: {
+    type: Sequelize.INTEGER,
+  },
+  altitude: {
+    type: Sequelize.INTEGER,
+  },
+  heading: {
+    type: Sequelize.FLOAT,
+  },
+  latitude: {
+    type: Sequelize.FLOAT,
+  },
+  longitude: {
+    type: Sequelize.FLOAT,
+  },
+  speed: {
+    type: Sequelize.FLOAT,
+  },
+},
+{
+  indexes: [{
+    unique: true,
+    fields: ['personId'],
+  }]
+})
+Person.hasOne(UserLocation);
 
 const ObjectCl = db.define('objectCl', {
   name: {
