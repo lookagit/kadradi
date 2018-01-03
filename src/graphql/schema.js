@@ -299,9 +299,9 @@ const Mutation = new GraphQLObjectType({
           }
         }
       },
-      addLocation: {
+      // addLocation: {
 
-      }
+      // }
     }
   }
 });
