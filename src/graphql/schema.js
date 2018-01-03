@@ -4,6 +4,7 @@ import {
   GraphQLSchema,
   GraphQLInt,
   GraphQLList,
+  GraphQLFloat,
   GraphQLNonNull,
 } from 'graphql';
 import db from '../../db/db';
