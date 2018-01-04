@@ -7,6 +7,7 @@ import {
   GraphQLNonNull,
 } from 'graphql';
 import db from '../../db/db';
+import jwt from 'jsonwebtoken';
 async function getMessage() {
   return {
     text: `Hello from the GraphQL server @ ${new Date()}`,
@@ -66,6 +67,18 @@ const Person = new GraphQLObjectType({
         type: GraphQLString,
         resolve(person) {
           return person.google_id;
+        }
+      },
+      token: {
+        type: GraphQLString,
+        resolve(person) {
+          return person.token;
+        }
+      },
+      error: {
+        type: GraphQLString,
+        resolve(person) {
+          return person.error
         }
       },
       profileInfo: {
@@ -240,6 +253,44 @@ const Mutation = new GraphQLObjectType({
           }
         }
       },
+      userLogin: {
+        type: Person,
+        args: {
+          email:{
+            type: GraphQLString
+          },
+          password: {
+            type: GraphQLString
+          },
+          fbToken: {
+            type: GraphQLString
+          },
+          gToken: {
+            type: GraphQLString
+          }
+        },
+        async resolve(parrentValue, args) {
+          console.log('evo ga login');
+          if(args.fbToken) {
+            return args.fbToken
+          } else if(args.gToken) {
+            return args.gToken
+          } else {
+            let user = await db.models.person.findOne({where: {email: args.email, password: args.password}})
+            if(user) {
+              const payload = {
+                id: user.id,
+                email: user.email,
+              }
+              const token = jwt.sign(payload, 'nasasifra');
+              user.token = token;
+              return user
+            } else {
+              return {error: 'Invalid access'}
+            }
+          }
+        }
+      }
     }
   }
 });

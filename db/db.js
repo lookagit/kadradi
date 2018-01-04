@@ -337,17 +337,17 @@ const friendsRelationsArr = [
     friendsPersonId: 3
   },
 ]
-db.sync({force: true}).then(() => {
-  PersonsArr.map(item => {
-    return Person.create(item);
-  });
-  FriendStatusArr.map(item => {
-    return FriendStatus.create(item);
-  });
-  return friendsRelationsArr.map(item => {
-    return FriendsList.create(item);
-  });
-});
+// db.sync({force: true}).then(() => {
+//   PersonsArr.map(item => {
+//     return Person.create(item);
+//   });
+//   FriendStatusArr.map(item => {
+//     return FriendStatus.create(item);
+//   });
+//   return friendsRelationsArr.map(item => {
+//     return FriendsList.create(item);
+//   });
+// });
 
 
 export default db;
