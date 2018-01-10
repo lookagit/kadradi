@@ -10,7 +10,7 @@ export const dataArr = {
           avgRating: faker.random.number({min:0, max:5})
         }
       }),
-      ReviewsArr: Array(10).fill().map(item => {
+      ReviewsArr: Array(40).fill().map(item => {
         return {
           textReview: faker.lorem.sentence(),
           rating: faker.random.number({min:0, max:5}),

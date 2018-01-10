@@ -239,12 +239,39 @@ const ObjectCl = new GraphQLObjectType({
           return await db.models.objectCategories.find({where: ObjectCl.objectCategoryId})
         }
       },
-      objectReviews: {
+      ObjectReview: {
         type: new GraphQLList(ObjectReview),
-        async resolve(ObjectCl) {
-          return await db.models.objectReview.findAll({where: ObjectCl.id})
+        args: {
+          page: {
+            type: GraphQLInt
+          }
+        },
+        async resolve(ObjectCl, args) {
+          if(args.page) {
+            let a;
+            let limit = 3;
+            let offset = 0;
+            await db.models.objectReview.findAndCountAll()
+            .then(async(data) => {
+              let page = args.page;
+              let pages = Math.ceil(data.count / limit);
+              offset = limit * (page - 1);
+              await db.models.objectReview.findAll({
+                where: {objectClId: ObjectCl.id},
+                limit: limit,
+                offset: offset,
+                $sort: { id: 1 }
+              })
+              .then((objectReviews) => {
+                a = objectReviews 
+              })
+            })
+            return a
+          } else {
+            return await db.models.objectReview.findAll({ where: {objectClId: ObjectCl.id}} )
+          }
         }
-      } 
+      }
     }
   }
 })
