@@ -10,86 +10,12 @@ import db from '../../db/db';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import md5 from 'md5';
+import socialApi from '../api/socialApi'
+
 async function getMessage() {
   return {
     text: `Hello from the GraphQL server @ ${new Date()}`,
   };
-}
-
-async function checkSocialToken(network, token) {
-  let a = {
-    id: null,
-    success: false
-  };
-  if (network == 'facebook') {
-    await fetch('https://graph.facebook.com/me?access_token=' + token)
-      .then((response) => response.text())
-      .then((responseText) => {
-        const data = JSON.parse(responseText);
-        if (data.id) {
-          a.id = data.id;
-          a.success = true
-        } else {
-          a.id = 'Invalid token',
-            a.success = false
-        }
-
-      })
-  } else if (network == 'google') {
-    await fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + token)
-      .then((response) => response.text())
-      .then((responseText) => {
-        const data = JSON.parse(responseText);
-        if (data.id) {
-          a.id = data.id;
-          a.success = true
-        } else {
-          a.id = 'Invalid token',
-            a.success = false
-        }
-      })
-  } else {
-    a.id = "Social network invalid!";
-    a.success = false
-  }
-  return a;
-}
-
-async function fbGetInfo(id, token) {
-  let a;
-  await fetch('https://graph.facebook.com/' + id + '/?fields=first_name,last_name,email&access_token=' + token)
-    .then((response) => response.text())
-    .then((responseText) => {
-      const data = JSON.parse(responseText);
-      a = data;
-    })
-  return a;
-}
-
-async function googleGetInfo(token) {
-  let a = {
-    id: null,
-    firstName: null,
-    lastName: null,
-    email: null,
-
-  };
-  await fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + token)
-    .then((response) => response.text())
-    .then((responseText) => {
-      const data = JSON.parse(responseText);
-      if (data.id) {
-        a.id = data.id;
-        a.firstName = data.given_name;
-        a.lastName = data.family_name;
-        a.email = data.email;
-        a.success = true
-      } else {
-        a.id = 'Invalid token',
-          a.success = false
-      }
-    })
-  return a;
 }
 
 const Message = new GraphQLObjectType({
@@ -384,8 +310,6 @@ const FriendsList = new GraphQLObjectType({
   }
 });
 
-
-
 // Root query.  This is our 'public API'.
 const Query = new GraphQLObjectType({
   name: 'Query',
@@ -604,9 +528,9 @@ const Mutation = new GraphQLObjectType({
         },
         async resolve(parrentValue, args) {
           if (args.fbToken) {
-            const fbId = await checkSocialToken('facebook', args.fbToken);
+            const fbId = await socialApi.checkSocialToken('facebook', args.fbToken);
             if (fbId.success) {
-              const fbInfo = await fbGetInfo(fbId.id, args.fbToken);
+              const fbInfo = await socialApi.fbGetInfo(fbId.id, args.fbToken);
               let user = await db.models.person.findOne({ where: { email: fbInfo.email } });
               if (user) {
                 const payload = {
@@ -643,9 +567,9 @@ const Mutation = new GraphQLObjectType({
               return { error: fbId.id }
             }
           } else if (args.gToken) {
-            const gId = await checkSocialToken('google', args.gToken);
+            const gId = await socialApi.checkSocialToken('google', args.gToken);
             if (gId.success) {
-              const gInfo = await googleGetInfo(args.gToken);
+              const gInfo = await socialApi.googleGetInfo(args.gToken);
               let user = await db.models.person.findOne({ where: { email: gInfo.email } })
               if (user) {
                 const payload = {
