@@ -16,7 +16,7 @@ async function getMessage() {
 }
 
 async function checkSocialToken(network, token) {
-  let a={
+  let a = {
     id: null,
     success: false
   };
@@ -30,21 +30,21 @@ async function checkSocialToken(network, token) {
           a.success = true
         } else {
           a.id = 'Invalid token',
-          a.success = false
+            a.success = false
         }
 
       })
   } else if (network == 'google') {
-    await fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token='+token)
+    await fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + token)
       .then((response) => response.text())
       .then((responseText) => {
         const data = JSON.parse(responseText);
-        if(data.id){
+        if (data.id) {
           a.id = data.id;
           a.success = true
         } else {
           a.id = 'Invalid token',
-          a.success = false
+            a.success = false
         }
       })
   } else {
@@ -67,29 +67,29 @@ async function fbGetInfo(id, token) {
 
 async function googleGetInfo(token) {
   let a = {
-    id:  null,
+    id: null,
     firstName: null,
     lastName: null,
     email: null,
 
   };
-  await fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token='+token)
-      .then((response) => response.text())
-      .then((responseText) => {
-        const data = JSON.parse(responseText);
-        if(data.id){
-          a.id = data.id;
-          a.firstName = data.given_name;
-          a.lastName = data.family_name;
-          a.email = data.email;
-          a.success = true
-        } else {
-          a.id = 'Invalid token',
+  await fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + token)
+    .then((response) => response.text())
+    .then((responseText) => {
+      const data = JSON.parse(responseText);
+      if (data.id) {
+        a.id = data.id;
+        a.firstName = data.given_name;
+        a.lastName = data.family_name;
+        a.email = data.email;
+        a.success = true
+      } else {
+        a.id = 'Invalid token',
           a.success = false
-        }
-      })
-      return a;
-  } 
+      }
+    })
+  return a;
+}
 
 const Message = new GraphQLObjectType({
   name: 'Message',
@@ -185,6 +185,105 @@ const Person = new GraphQLObjectType({
   },
 });
 
+const ObjectCl = new GraphQLObjectType({
+  name: 'ObjectCl',
+  description: 'Objects and etc',
+  fields() {
+    return {
+      id: {
+        type: GraphQLInt,
+        resolve(ObjectCl) {
+          return ObjectCl.id
+        }
+      },
+      name: {
+        type: GraphQLString,
+        resolve(ObjectCl) {
+          return ObjectCl.name
+        }
+      },
+      shortDescription: {
+        type: GraphQLString,
+        resolve(ObjectCl) {
+          return ObjectCl.shortDescription
+        }
+      },
+      personId: {
+        type: GraphQLInt,
+        resolve(ObjectCl) {
+          return ObjectCl.personId
+        }
+      },
+      objectCategoryId: {
+        type: GraphQLInt,
+        resolve(ObjectCl) {
+          return ObjectCl.objectCategoryId
+        }
+      },
+      avgRating: {
+        type: GraphQLInt,
+        resolve(ObjectCl) {
+          return ObjectCl.avgRating
+        }
+      } 
+    }
+  }
+})
+
+const ObjectCategorie = new GraphQLObjectType({
+  name: 'ObjectCategorie',
+  description: 'Object Categories',
+  fields() {
+    return {
+      id: {
+        type: GraphQLInt,
+        resolve(ObjectCategorie) {
+          return ObjectCategorie.id
+        }
+      },
+      name: {
+        type: GraphQLString,
+        resolve(ObjectCategorie) {
+          return ObjectCategorie.name
+        }
+      }
+    }
+  }
+})
+
+const ObjectReview = new GraphQLObjectType({
+  name: 'ObjectReview',
+  description: 'Object reviews',
+  fields() {
+    return {
+      id: {
+        type: GraphQLInt,
+        resolve(ObjectReview) {
+          return ObjectReview.id
+        }
+      },
+      textReview: {
+        type: GraphQLString,
+        resolve(ObjectReview) {
+          return ObjectReview.textReview
+        }
+      },
+      personId: {
+        type: GraphQLInt,
+        resolve(ObjectReview) {
+          return ObjectReview.personId
+        }
+      },
+      objectClId: {
+        type: GraphQLInt,
+        resolve(ObjectReview) {
+          return ObjectReview.objectClid
+        }
+      }
+    }
+  }
+})
+
 const UserProfile = new GraphQLObjectType({
   name: 'UserProfile',
   description: 'User profile info. Image url and location',
@@ -249,6 +348,51 @@ const Query = new GraphQLObjectType({
           return db.models.person.findAll({ where: args });
         },
       },
+      objectCl: {
+        type: new GraphQLList(ObjectCl),
+        args: {
+          id: {
+            type: GraphQLInt
+          },
+          personId: {
+            type: GraphQLInt
+          },
+          objectCategoryId: {
+            type: GraphQLInt
+          }
+        },
+        resolve(root, args) {
+          return db.models.objectCl.findAll({ where: args });
+        },
+      },
+      ObjectCategorie: {
+        type: new GraphQLList(ObjectCategorie),
+        args: {
+          id: {
+            type: GraphQLInt
+          }
+        },
+        resolve(root, args) {
+          return db.models.objectCategories.findAll({ where: args })
+        }
+      },
+      ObjectReview: {
+        type: new GraphQLList(ObjectReview),
+        args: {
+          id: {
+            type: GraphQLInt
+          },
+          personId: {
+            type: GraphQLInt
+          },
+          objectClId: {
+            type: GraphQLInt
+          }
+        },
+        resolve(root, args) {
+          return db.models.objectReview.findAll({ where: args })
+        }
+      }
     };
   },
 });
@@ -442,10 +586,10 @@ const Mutation = new GraphQLObjectType({
             }
           } else if (args.gToken) {
             const gId = await checkSocialToken('google', args.gToken);
-            if(gId.success) {
-              const gInfo = await googleGetInfo(args.gToken); 
-              let user = await db.models.person.findOne({where: { email: gInfo.email }})
-              if(user) {
+            if (gId.success) {
+              const gInfo = await googleGetInfo(args.gToken);
+              let user = await db.models.person.findOne({ where: { email: gInfo.email } })
+              if (user) {
                 const payload = {
                   id: user.id,
                   email: user.email
@@ -454,8 +598,8 @@ const Mutation = new GraphQLObjectType({
                 user.token = token;
                 return user;
               } else {
-                let person = await db.models.person.create( {google_id: gInfo.id, email: gInfo.email, firstName: gInfo.firstName, lastName: gInfo.lastName} );
-                if(person) {
+                let person = await db.models.person.create({ google_id: gInfo.id, email: gInfo.email, firstName: gInfo.firstName, lastName: gInfo.lastName });
+                if (person) {
                   const payload = {
                     id: person.id,
                     email: person.email

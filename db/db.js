@@ -3,6 +3,8 @@ import Sequelize from 'sequelize';
 
 const db = new Sequelize('postgres://kadradiuser:jw8s0F4122Pi&&2@kadradipostgres.cjx5vc7fbujv.eu-west-1.rds.amazonaws.com/kadradidev');
 
+import { dataArr } from './dataArrays';
+
 const Person = db.define('person', {
   password: {
     type: Sequelize.STRING
@@ -124,6 +126,9 @@ const ObjectCl = db.define('objectCl', {
   shortDescription: {
     type: Sequelize.STRING,
     allowNull:false
+  },
+  avgRating: {
+    type: Sequelize.INTEGER,
   }
 });
 Person.hasOne(ObjectCl);
@@ -136,7 +141,16 @@ const ObjectCategorie = db.define('objectCategories', {
 });
 ObjectCategorie.hasOne(ObjectCl);
 
-
+const ObjectReview = db.define('objectReview', {
+  textReview: {
+    type: Sequelize.STRING,
+  },
+  rating: {
+    type: Sequelize.STRING,
+  },
+});
+Person.hasOne(ObjectReview);
+ObjectCl.hasOne(ObjectReview);
 
 const ObjectInfo = db.define('objectInfo', {
   address: {
@@ -290,88 +304,33 @@ FriendsList.belongsTo(Person, {
 FriendsList.hasOne(FriendStatus);
 
 
+db.sync({force: true}).then(() => {
 
-const FriendStatusArr = [
-  {
-    status: "Requested"
-  },
-  {
-    status: "Request sent"
-  },
-  {
-    status: "Friends"
-  },
-  {
-    status: "Blocked"
-  }
-];
-const PersonsArr = [
-  {
-    username: "steva",
-    password: "asddd",
-    email: "steva@gmai.com",
-    firstName: "Steva",
-    lastName: "Stevic",
-    facebook_id: "asdhasiu1h2suih12iuhiu",
-    google_id: "asdhasiu1h2uihasd12iuhiu",
-    role_id: 1,
-    user_type_id: 1,
-  },
-  {
-    username: "luka",
-    password: "asddsdffd",
-    email: "luka@gmaai.com",
-    firstName: "Luka",
-    lastName: "Lukic",
-    facebook_id: "asdhasaiu1h2suih12iuhiu",
-    google_id: "asdhasius1h2uihasd12iuhiu",
-    role_id: 1,
-    user_type_id: 1,
-  },
-  {
-    username: "baki",
-    password: "asddsfrrffrdffd",
-    email: "baki@gmaai.com",
-    firstName: "Baki",
-    lastName: "Bakic",
-    facebook_id: "asdhasaisssu1h2suih12iuhiu",
-    google_id: "asdhasiusssss1h2uihasd12iuhiu",
-    role_id: 1,
-    user_type_id: 1,
-  },
-];
-const friendsRelationsArr = [
-  {
-    facebookFriend: false,
-    googleFriend: false,
-    personId: 1,
-    friendsPersonId: 2
-  },
-  {
-    facebookFriend: false,
-    googleFriend: false,
-    personId: 1,
-    friendsPersonId: 3
-  },
-  {
-    facebookFriend: false,
-    googleFriend: false,
-    personId: 2,
-    friendsPersonId: 3
-  },
-]
-db.sync({force: true})
-// .then(() => {
-//   PersonsArr.map(item => {
-//     return Person.create(item);
-//   });
-//   FriendStatusArr.map(item => {
-//     return FriendStatus.create(item);
-//   });
-//   return friendsRelationsArr.map(item => {
-//     return FriendsList.create(item);
-//   });
-// });
+  dataArr.PersonsArr.map(async item => {
+    await Person.create(item);
+  });
+
+  dataArr.friendsRelationsArr.map(async item => {
+    await FriendsList.create(item);
+  });
+
+  dataArr.FriendStatusArr.map(async item => {
+    await FriendStatus.create(item);
+  })
+
+  dataArr.CategoriesArr.map(async item => {
+    await ObjectCategorie.create(item);
+  });
+
+  dataArr.ObjectClArr.map(async item => {
+    await ObjectCl.create(item);
+  });
+
+  dataArr.ReviewsArr.map(async item => {
+    await ObjectReview.create(item);
+  });
+
+});
 
 
 export default db;
