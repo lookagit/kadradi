@@ -226,6 +226,18 @@ const ObjectCl = new GraphQLObjectType({
         resolve(ObjectCl) {
           return ObjectCl.avgRating
         }
+      },
+      person: {
+        type: Person,
+        async resolve(ObjectCl) {
+          return await db.models.person.find({where: ObjectCl.personId})
+        }
+      },
+      objectCategory: {
+        type: ObjectCategorie,
+        async resolve(ObjectCl) {
+          return await db.models.objectCategories.find({where: ObjectCl.objectCategoryId})
+        }
       } 
     }
   }
