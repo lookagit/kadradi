@@ -238,6 +238,12 @@ const ObjectCl = new GraphQLObjectType({
         async resolve(ObjectCl) {
           return await db.models.objectCategories.find({where: ObjectCl.objectCategoryId})
         }
+      },
+      objectReviews: {
+        type: new GraphQLList(ObjectReview),
+        async resolve(ObjectCl) {
+          return await db.models.objectReview.findAll({where: ObjectCl.id})
+        }
       } 
     }
   }
