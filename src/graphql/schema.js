@@ -9,6 +9,7 @@ import {
 import db from '../../db/db';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import md5 from 'md5';
 async function getMessage() {
   return {
     text: `Hello from the GraphQL server @ ${new Date()}`,
@@ -474,7 +475,7 @@ const Mutation = new GraphQLObjectType({
             if (dbperson.length > 0 || dbpersonNonactive.length > 0) {
               return { error: "User exists" }
             } else {
-              args.emailHash = args.email;
+              args.emailHash = md5(args.email);
               return await db.models.personNonactive.create(args);
             }
           } else {
