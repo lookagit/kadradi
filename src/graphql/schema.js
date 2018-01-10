@@ -287,10 +287,22 @@ const ObjectReview = new GraphQLObjectType({
           return ObjectReview.personId
         }
       },
+      person: {
+        type: Person,
+        async resolve(ObjectReview) {
+          return await db.models.person.find({where: ObjectReview.personId})
+        }
+      },
       objectClId: {
         type: GraphQLInt,
         resolve(ObjectReview) {
           return ObjectReview.objectClId
+        }
+      },
+      objectCl: {
+        type: ObjectCl,
+        async resolve(ObjectReview) {
+          return await db.models.objectCl.find({where: ObjectReview.objectClId})
         }
       }
     }
