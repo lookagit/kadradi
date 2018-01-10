@@ -277,7 +277,7 @@ const ObjectReview = new GraphQLObjectType({
       objectClId: {
         type: GraphQLInt,
         resolve(ObjectReview) {
-          return ObjectReview.objectClid
+          return ObjectReview.objectClId
         }
       }
     }
@@ -474,7 +474,7 @@ const Mutation = new GraphQLObjectType({
             if (dbperson.length > 0 || dbpersonNonactive.length > 0) {
               return { error: "User exists" }
             } else {
-              args.emailHash = await bcrypt.hash(args.email, 10);
+              args.emailHash = args.email;
               return await db.models.personNonactive.create(args);
             }
           } else {
