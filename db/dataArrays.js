@@ -1,7 +1,7 @@
 import faker from 'faker';
 
 export const dataArr = {
-    ObjectClArr: Array(5).fill().map(item => {
+    ObjectClArr: Array(32).fill().map(item => {
         return {
           name: faker.company.companyName(),
           shortDescription: faker.lorem.sentence(),

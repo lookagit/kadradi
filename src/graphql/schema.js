@@ -74,10 +74,34 @@ const Query = new GraphQLObjectType({
           },
           objectCategoryId: {
             type: GraphQLInt
+          },
+          page: {
+            type: GraphQLInt
           }
         },
-        resolve(root, args) {
-          return db.models.objectCl.findAll({ where: args });
+        async resolve(root, args) {
+          if(args.page){
+            let a;
+            let limit = 8;
+            let offset = 0;
+            await db.models.objectCl.findAndCountAll()
+            .then(async(data)=>{
+              let page = args.page;
+              let pages = Math.ceil(data.count / limit);
+              offset = limit * (page - 1);
+              await db.models.objectCl.findAll({
+                limit: limit,
+                offset: offset,
+                $sort: { id: 1 }
+              })
+              .then((objectCls) => {
+                a = objectCls
+              })
+            })
+            return a;
+          } else {
+            return db.models.objectCl.findAll({ where: args });
+          }
         },
       },
       ObjectCategorie: {
