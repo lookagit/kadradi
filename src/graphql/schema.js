@@ -236,6 +236,7 @@ const Mutation = new GraphQLObjectType({
             personNonactive.dataValues.role_id = 1
             personNonactive.dataValues.user_type_id = 1;
             const person = await db.models.person.create(personNonactive.dataValues);
+            const personProfile = await db.models.userProfile.create({ personId: person.id, profileImageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_960_720.png"})
             return person;
           }
         }
