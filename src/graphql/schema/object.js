@@ -3,6 +3,7 @@ import {
     GraphQLString,
     GraphQLSchema,
     GraphQLInt,
+    GraphQLFloat,
     GraphQLList,
     GraphQLNonNull,
 } from 'graphql';
@@ -49,9 +50,18 @@ const ObjectCl = new GraphQLObjectType({
           }
         },
         avgRating: {
-          type: GraphQLInt,
-          resolve(ObjectCl) {
-            return ObjectCl.avgRating
+          type: GraphQLFloat,
+          async resolve(ObjectCl) {
+            let sum = 0.0;
+            const reviews = await db.models.objectReview.findAll({
+              where: {objectClId: ObjectCl.id}
+            })
+            reviews.map(item => {
+              sum += item.rating
+            })
+            let avg = sum/reviews.length;
+
+            return Math.round(avg*2)/2;
           }
         },
         person: {
@@ -139,6 +149,12 @@ const ObjectCl = new GraphQLObjectType({
           type: GraphQLString,
           resolve(ObjectReview) {
             return ObjectReview.textReview
+          }
+        },
+        rating: {
+          type: GraphQLFloat,
+          resolve(ObjectReview) {
+            return ObjectReview.rating
           }
         },
         personId: {

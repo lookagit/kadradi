@@ -146,7 +146,7 @@ const ObjectReview = db.define('objectReview', {
     type: Sequelize.STRING,
   },
   rating: {
-    type: Sequelize.STRING,
+    type: Sequelize.FLOAT,
   },
 });
 Person.hasOne(ObjectReview);

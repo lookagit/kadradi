@@ -233,6 +233,8 @@ const Mutation = new GraphQLObjectType({
           if (args.emailHash) {
             const personNonactive = await db.models.personNonactive.find({ where: { emailHash: args.emailHash } });
             await db.models.personNonactive.destroy({ where: personNonactive.dataValues });
+            personNonactive.dataValues.role_id = 1
+            personNonactive.dataValues.user_type_id = 1;
             const person = await db.models.person.create(personNonactive.dataValues);
             return person;
           }
@@ -308,7 +310,7 @@ const Mutation = new GraphQLObjectType({
                   userId.token = token;
                   return userId;
                 } else {
-                  let person = await db.models.person.create({ facebook_id: fbId.id, email: fbInfo.email, firstName: fbInfo.first_name, lastName: fbInfo.last_name })
+                  let person = await db.models.person.create({ facebook_id: fbId.id, email: fbInfo.email, firstName: fbInfo.first_name, lastName: fbInfo.last_name, role_id: 1, user_type_id: 1 })
                   if (person) {
                     const payload = {
                       id: person.id,
@@ -337,7 +339,7 @@ const Mutation = new GraphQLObjectType({
                 user.token = token;
                 return user;
               } else {
-                let person = await db.models.person.create({ google_id: gInfo.id, email: gInfo.email, firstName: gInfo.firstName, lastName: gInfo.lastName });
+                let person = await db.models.person.create({ google_id: gInfo.id, email: gInfo.email, firstName: gInfo.firstName, lastName: gInfo.lastName, role_id: 1, user_type_id: 1 });
                 if (person) {
                   const payload = {
                     id: person.id,
@@ -363,6 +365,28 @@ const Mutation = new GraphQLObjectType({
               return { error: 'Invalid access' }
             }
           }
+        }
+      },
+      createReview: {
+        type: ObjectReview,
+        args: {
+          textReview: {
+            type: GraphQLString
+          },
+          objectClId: {
+            type: GraphQLInt
+          },
+          token: {
+            type: GraphQLString
+          }
+        },
+        async resolve(parrentValue, args) {
+          const user = jwt.verify(args.token, 'nasasifra');
+          return db.models.objectReview.create({
+            textReview: args.textReview,
+            personId: user.id,
+            objectClId: args.objectClId
+          })
         }
       }
     }
