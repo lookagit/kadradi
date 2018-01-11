@@ -4,10 +4,12 @@ import {
     GraphQLSchema,
     GraphQLInt,
     GraphQLFloat,
+    GraphQLBoolean,
     GraphQLList,
     GraphQLNonNull,
 } from 'graphql';
 import db from '../../../db/db';
+import faker from 'faker'
 
 import PersonSchema from './person'
 
@@ -41,6 +43,12 @@ const ObjectCl = new GraphQLObjectType({
           type: GraphQLInt,
           resolve(ObjectCl) {
             return ObjectCl.personId
+          }
+        },
+        isWorking: {
+          type: GraphQLBoolean,
+          resolve() {
+            return faker.random.boolean();
           }
         },
         objectCategoryId: {

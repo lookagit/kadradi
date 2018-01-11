@@ -47,6 +47,16 @@ export default {
           })
         return a;
       },
+      async fbGetProfileImage(id) {
+        let a;
+        await fetch('https://graph.facebook.com/'+id+'/picture/?redirect=0&width=150')
+        .then((response)=> response.text())
+        .then((responseText) => {
+          const data = JSON.parse(responseText)
+          a = data;
+        })
+        return a
+      },
       async  googleGetInfo(token) {
         let a = {
           id: null,

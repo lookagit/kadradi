@@ -298,6 +298,7 @@ const Mutation = new GraphQLObjectType({
                 }
                 const token = jwt.sign(payload, 'nasasifra');
                 user.token = token;
+                console.log(await socialApi.fbGetProfileImage(fbId.id));
                 return user;
               } else {
                 let userId = await db.models.person.findOne({ where: { facebook_id: fbId.id } })
@@ -318,6 +319,7 @@ const Mutation = new GraphQLObjectType({
                     }
                     const token = jwt.sign(payload, 'nasasifra');
                     person.token = token;
+                    console.log(await socialApi.fbGetProfileImage(fbId.id));
                     return person;
                   }
                 }
