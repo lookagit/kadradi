@@ -298,7 +298,6 @@ const Mutation = new GraphQLObjectType({
                 }
                 const token = jwt.sign(payload, 'nasasifra');
                 user.token = token;
-                console.log(await socialApi.fbGetProfileImage(fbId.id));
                 return user;
               } else {
                 let userId = await db.models.person.findOne({ where: { facebook_id: fbId.id } })
@@ -311,7 +310,9 @@ const Mutation = new GraphQLObjectType({
                   userId.token = token;
                   return userId;
                 } else {
+                  const profileImage = await socialApi.fbGetProfileImage(fbId.id);
                   let person = await db.models.person.create({ facebook_id: fbId.id, email: fbInfo.email, firstName: fbInfo.first_name, lastName: fbInfo.last_name, role_id: 1, user_type_id: 1 })
+                  const personProfile = await db.models.userProfile.create({ personId: person.id, profileImageUrl: profileImage.data.url })
                   if (person) {
                     const payload = {
                       id: person.id,
@@ -319,7 +320,6 @@ const Mutation = new GraphQLObjectType({
                     }
                     const token = jwt.sign(payload, 'nasasifra');
                     person.token = token;
-                    console.log(await socialApi.fbGetProfileImage(fbId.id));
                     return person;
                   }
                 }

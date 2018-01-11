@@ -70,17 +70,12 @@ const Person = new GraphQLObjectType({
             profileInfo: {
                 type: UserProfile,
                 async resolve(person) {
-                    let userProf = await db.models.userProfile.findAll({
+                    const userProf = await db.models.userProfile.find({
                         where: {
                             personId: person.id,
                         }
                     });
-                    if (userProf.length) {
-                        let [{ dataValues }] = userProf;
-                        return dataValues;
-                    } else {
-                        return {}
-                    }
+                    return userProf;
                 }
             }
         };
