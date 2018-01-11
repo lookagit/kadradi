@@ -61,6 +61,7 @@ const ObjectCl = new GraphQLObjectType({
           type: GraphQLFloat,
           async resolve(ObjectCl) {
             let sum = 0.0;
+            let throwback;
             const reviews = await db.models.objectReview.findAll({
               where: {objectClId: ObjectCl.id}
             })
@@ -68,8 +69,21 @@ const ObjectCl = new GraphQLObjectType({
               sum += item.rating
             })
             let avg = sum/reviews.length;
-
-            return Math.round(avg*2)/2;
+            if(reviews.length == 0) {
+              throwback = 0;
+            } else {
+              throwback = Math.round(avg*2)/2;
+            } 
+            return throwback;
+          }
+        },
+        ratingCount: {
+          type: GraphQLInt,
+          async resolve(ObjectCl) {
+            const ratingCount = await db.models.objectReview.findAndCountAll({
+              where: {objectClId: ObjectCl.id}
+            })
+            return ratingCount.count;
           }
         },
         person: {
