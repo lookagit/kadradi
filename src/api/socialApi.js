@@ -74,12 +74,24 @@ export default {
               a.firstName = data.given_name;
               a.lastName = data.family_name;
               a.email = data.email;
+              a.picture = data.picture;
               a.success = true
             } else {
               a.id = 'Invalid token',
                 a.success = false
             }
           })
+        return a;
+      },
+
+      async gGetProfileImage(id, token) {
+        let a;
+        await fetch ('https://www.googleapis.com/plus/v1/people/'+id+'?fields=image&key='+token)
+        .then((response) => response.text())
+        .then((responseText) => {
+          const data = JSON.parse(responseText);
+          a = data
+        })
         return a;
       }
 }

@@ -342,6 +342,7 @@ const Mutation = new GraphQLObjectType({
                 return user;
               } else {
                 let person = await db.models.person.create({ google_id: gInfo.id, email: gInfo.email, firstName: gInfo.firstName, lastName: gInfo.lastName, role_id: 1, user_type_id: 1 });
+                const personProfile = await db.models.userProfile.create({ personId: person.id, profileImageUrl: gInfo.picture })
                 if (person) {
                   const payload = {
                     id: person.id,
