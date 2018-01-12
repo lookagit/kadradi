@@ -59,6 +59,14 @@ function izracunajDistancu (lat1, lon1, lat2, lon2) {
   const d = Math.sqrt(x * x + y * y) * R
   return d
 }
+function compare(a,b) {
+  if (a.distance < b.distance)
+    return -1;
+  if (a.distance > b.distance)
+    return 1;
+  return 0;
+}
+
 
 
 // Root query.  This is our 'public API'.
@@ -103,6 +111,7 @@ const Query = new GraphQLObjectType({
         async resolve(root, args) {
           const firstObjects = await db.models.objectCl.findAll({where: { objectCategoryId: args.categoryId }});
           let objIds = [];
+          let distanca = []
           firstObjects.map(item => {
             objIds.push(item.id)
           })
@@ -114,14 +123,20 @@ const Query = new GraphQLObjectType({
             let distance = izracunajDistancu(args.lat, args.lng, item.lat, item.lng)
             if(distance < args.distance) {
               calcObjIds.push(item.objectClId)
+              distanca.push(distance)
             }
           })
           if(calcObjIds.length == 0) {
             calcObjIds = [0]
           }
-          return db.models.objectCl.findAll({where: { id: {
+          let vraceniObjekti = await db.models.objectCl.findAll({where: { id: {
             [Op.or]: calcObjIds
           }}})
+          for(let i = 0; i < vraceniObjekti.length; i++) {
+            vraceniObjekti[i].distance = distanca[i];
+          }
+          vraceniObjekti.sort(compare)
+          return vraceniObjekti;
         }
       },
       objectCl: {

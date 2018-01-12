@@ -142,6 +142,12 @@ const ObjectCl = new GraphQLObjectType({
           async resolve (ObjectCl) {
             return await db.models.objectLocation.findAll({where: {objectClId: ObjectCl.id}})
           }
+        },
+        distance: {
+          type: GraphQLFloat,
+          resolve(ObjectCl) {
+            return ObjectCl.distance
+          }
         }
       }
     }
