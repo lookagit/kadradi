@@ -57,6 +57,9 @@ const Query = new GraphQLObjectType({
           },
           email: {
             type: GraphQLString
+          },
+          token: {
+            type: GraphQLString
           }
         },
         resolve(root, args) {
@@ -77,6 +80,9 @@ const Query = new GraphQLObjectType({
           },
           page: {
             type: GraphQLInt
+          },
+          token: {
+            type: GraphQLString
           }
         },
         async resolve(root, args) {
