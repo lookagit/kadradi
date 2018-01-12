@@ -130,6 +130,94 @@ const ObjectCl = new GraphQLObjectType({
               return await db.models.objectReview.findAll({ where: {objectClId: ObjectCl.id}} )
             }
           }
+        },
+        images: {
+          type: objectImages,
+          async resolve(ObjectCl) {
+            return await db.models.objectFile.findAll({where: {objectClId: ObjectCl.id}})
+          }
+        }
+      }
+    }
+  })
+
+  const objectImages = new GraphQLObjectType({
+    name: 'objectImages',
+    description: 'Images of object',
+    fields() {
+      return {
+        profileImage: {
+          type: objectImage,
+          resolve(objectImages) {
+            const result = objectImages.filter(obj => {
+              return obj.objectFileCategoryId == 1;
+            })
+            if(result.length) {
+              return result[0]
+            } else {
+              return {fileUrl: '',desc: ''}
+            }
+          }
+        },
+        exteriorImage: {
+          type: new GraphQLList(objectImage),
+          resolve(objectImages) {
+            const result = objectImages.filter(obj => {
+              return obj.objectFileCategoryId == 2;
+            })
+            if(result.length) {
+              return result
+            } else {
+              return [{fileUrl: '',desc: ''}]
+            }
+          }
+        },
+        interiorImage: {
+          type: new GraphQLList(objectImage),
+          resolve(objectImages) {
+            const result = objectImages.filter(obj => {
+              return obj.objectFileCategoryId == 3;
+            })
+            if(result.length) {
+              return result
+            } else {
+              return [{fileUrl: '',desc: ''}]
+            }
+          }
+        },
+        foodImage: {
+          type: new GraphQLList(objectImage),
+          resolve(objectImages) {
+            const result = objectImages.filter(obj => {
+              return obj.objectFileCategoryId == 4;
+            })
+            if(result.length) {
+              return result
+            } else {
+              return [{fileUrl: '',desc: ''}]
+            }
+          }
+        },
+      }
+    }
+  })
+
+  const objectImage = new GraphQLObjectType({
+    name: 'objectImage',
+    description: 'object image',
+    fields() {
+      return {
+        fileUrl: {
+          type: GraphQLString,
+          resolve(objectImage) {
+            return objectImage.fileUrl
+          }
+        },
+        desc: {
+          type: GraphQLString,
+          resole(objectImage) {
+            return objectImage.fileUrl
+          }
         }
       }
     }

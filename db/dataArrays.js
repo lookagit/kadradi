@@ -121,6 +121,75 @@ export const dataArr = {
           role_id: 1,
           user_type_id: 1,
         },
+      ],
+
+      FileCategory: [
+        {
+          type: 'profile',
+          desc: 'Profile picture for Object'
+        },
+        {
+          type: 'exterior',
+          desc: 'Exterior picture for Object'
+        },
+        {
+          type: 'interior',
+          desc: 'Interior picture for Object'
+        },
+        {
+          type: 'food',
+          desc: 'Food picture for Object'
+        }
+      ],
+      ObjectFiles: [
+        {
+          fileUrl: 'http://cdn.idesignow.com/public_html/img/2015/06/cafe-bar-restaurant-logo-17.jpg',
+          desc: 'This is a very nice restaurant',
+          objectClId: 1,
+          objectFileCategoryId: 1
+        },
+        {
+          fileUrl: 'http://diylogodesigns.com/blog/wp-content/uploads/2015/09/restaurant-logos.jpg',
+          desc: 'Lukas favorite restaurant!',
+          objectClId: 2,
+          objectFileCategoryId: 1
+        },
+        {
+          fileUrl: 'https://marketplace.canva.com/MACP0zWxJzE/1/0/thumbnail_large/canva-colorful-burger-icon-restaurant-logo-MACP0zWxJzE.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 3,
+          objectFileCategoryId: 1
+        },
+        {
+          fileUrl: 'https://image.freepik.com/free-vector/restaurant-logo-template_1236-155.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 4,
+          objectFileCategoryId: 1
+        },
+        {
+          fileUrl: 'https://www.brandcrowd.com/gallery/brands/pictures/picture12681208825244.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 5,
+          objectFileCategoryId: 1
+        },
+        {
+          fileUrl: 'https://i.pinimg.com/564x/0d/82/f9/0d82f9cff5bb23a5fdba81dbf76ac8f9--chase-bank-logo-s.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 6,
+          objectFileCategoryId: 1
+        },
+        {
+          fileUrl: 'https://static.mts.rs/vesti/MTS-Tvoj-Svet-1920x1080.jpg?d=False&h=635827483175600000',
+          desc: 'Veoma lep restorancic',
+          objectClId: 7,
+          objectFileCategoryId: 1
+        },
+        {
+          fileUrl: 'https://exquisiteconcierge.co.uk/wp-content/uploads/2016/05/timberland-logo-wallpaper.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 8,
+          objectFileCategoryId: 1
+        },
       ]
 }
 
