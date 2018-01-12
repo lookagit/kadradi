@@ -155,7 +155,7 @@ const ObjectCl = new GraphQLObjectType({
             if(result.length) {
               return result[0]
             } else {
-              return {fileUrl: '',desc: ''}
+              return {fileUrl: 'https://cdn.pixabay.com/photo/2016/10/18/18/19/question-mark-1750942_960_720.png',desc: 'No description'}
             }
           }
         },
