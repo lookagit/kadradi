@@ -190,6 +190,60 @@ export const dataArr = {
           objectClId: 8,
           objectFileCategoryId: 1
         },
+        {
+          fileUrl: 'https://i.pinimg.com/736x/d7/da/ed/d7daed5a4cd14de571360cb09c2c89be--restaurant-exterior-design-ara.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 1,
+          objectFileCategoryId: 3
+        },
+        {
+          fileUrl: 'https://secondandseven.co/imgs/amazing-beach-house-coffee-tables-best-25-restaurant-exterior-design-ideas-on-pinterest-exterior-outdoor-cafe-and-20171230081254.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 1,
+          objectFileCategoryId: 3
+        },
+        {
+          fileUrl: 'http://www.coolenevada.com/images/Modern-Italian-Restaurant-Exterior-Design-Ferraros-Las-Vegas.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 1,
+          objectFileCategoryId: 3
+        },
+        {
+          fileUrl: 'https://static.dezeen.com/uploads/2017/06/salon-sociedad-communal-interiors-restaurants-and-bars_dezeen_hero-1.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 1,
+          objectFileCategoryId: 2
+        },
+        {
+          fileUrl: 'https://static.dezeen.com/uploads/2017/06/salon-sociedad-communal-interiors-restaurants-and-bars_dezeen_hero-1.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 1,
+          objectFileCategoryId: 2
+        },
+        {
+          fileUrl: 'https://static.dezeen.com/uploads/2017/06/salon-sociedad-communal-interiors-restaurants-and-bars_dezeen_hero-1.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 1,
+          objectFileCategoryId: 2
+        },
+        {
+          fileUrl: 'https://drop.ndtv.com/albums/COOKS/pasta-vegetarian/pastaveg_640x480.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 1,
+          objectFileCategoryId: 4
+        },
+        {
+          fileUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg/1200px-Good_Food_Display_-_NCI_Visuals_Online.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 1,
+          objectFileCategoryId: 4
+        },
+        {
+          fileUrl: 'https://drop.ndtv.com/albums/COOKS/chicken-dinner/chickendinner_640x480.jpg',
+          desc: 'Veoma lep restorancic',
+          objectClId: 1,
+          objectFileCategoryId: 4
+        },
       ]
 }
 

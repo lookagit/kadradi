@@ -304,39 +304,39 @@ FriendsList.belongsTo(Person, {
 FriendsList.hasOne(FriendStatus);
 
 
-db.sync({force: true}).then(() => {
+db.sync({force: false}).then(() => {
 
-  dataArr.PersonsArr.map(async item => {
-    await Person.create(item);
-  });
+  // dataArr.PersonsArr.map(async item => {
+  //   await Person.create(item);
+  // });
 
-  dataArr.friendsRelationsArr.map(async item => {
-    await FriendsList.create(item);
-  });
+  // dataArr.friendsRelationsArr.map(async item => {
+  //   await FriendsList.create(item);
+  // });
 
-  dataArr.FriendStatusArr.map(async item => {
-    await FriendStatus.create(item);
-  })
+  // dataArr.FriendStatusArr.map(async item => {
+  //   await FriendStatus.create(item);
+  // })
 
-  dataArr.CategoriesArr.map(async item => {
-    await ObjectCategorie.create(item);
-  });
+  // dataArr.CategoriesArr.map(async item => {
+  //   await ObjectCategorie.create(item);
+  // });
 
-  dataArr.ObjectClArr.map(async item => {
-    await ObjectCl.create(item);
-  });
+  // dataArr.ObjectClArr.map(async item => {
+  //   await ObjectCl.create(item);
+  // });
 
-  dataArr.ReviewsArr.map(async item => {
-    await ObjectReview.create(item);
-  });
+  // dataArr.ReviewsArr.map(async item => {
+  //   await ObjectReview.create(item);
+  // });
 
-  dataArr.FileCategory.map(async item => {
-    await ObjectFileCategory.create(item);
-  })
+  // dataArr.FileCategory.map(async item => {
+  //   await ObjectFileCategory.create(item);
+  // })
 
-  dataArr.ObjectFiles.map(async item => {
-    await ObjectFile.create(item)
-  })
+  // dataArr.ObjectFiles.map(async item => {
+  //   await ObjectFile.create(item)
+  // })
 
 });
 
