@@ -220,55 +220,6 @@ const Mutation = new GraphQLObjectType({
   description: 'Mutation for kadradi.com',
   fields() {
     return {
-      updateOrCreateUser: {
-        type: Person,
-        args: {
-          email: {
-            type: GraphQLString,
-          },
-          FBID: {
-            type: GraphQLString,
-          },
-          GID: {
-            type: GraphQLString,
-          },
-          firstName: {
-            type: GraphQLString,
-          },
-          lastName: {
-            type: GraphQLString,
-          }
-        },
-        async resolve(root, { email, FBID: facebook_id = "", GID: google_id = "", firstName, lastName, }) {
-          let create = await db.models.person.findOrCreate({
-            where: {
-              email,
-            }
-          })
-          if (create) {
-            let [user, isCreated] = create;
-            let { dataValues } = user;
-            if (isCreated) {
-              let update = await db.models.person.update({
-                email,
-                firstName,
-                lastName,
-                facebook_id,
-                google_id,
-              }, {
-                  where: {
-                    id: dataValues.id,
-                  }
-                })
-              if (update) {
-                return { id: dataValues.id };
-              }
-            }
-            return { id: dataValues.id };
-          }
-
-        }
-      },
       registerUser: {
         type: Person,
         args: {
@@ -317,35 +268,6 @@ const Mutation = new GraphQLObjectType({
             const person = await db.models.person.create(personNonactive.dataValues);
             const personProfile = await db.models.userProfile.create({ personId: person.id, profileImageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_960_720.png"})
             return person;
-          }
-        }
-      },
-      createProfile: {
-        type: UserProfile,
-        args: {
-          id: {
-            type: GraphQLInt,
-          },
-          imageUrl: {
-            type: GraphQLString,
-          },
-        },
-        async resolve(root, { id, imageUrl }) {
-          let image = await db.models.userProfile.findOne({ personId: parseInt(id) });
-          if (image) {
-            return image;
-          } else {
-            let createImgProfile = await db.models.userProfile.create({
-              profileImageUrl: imageUrl,
-              location: "",
-              personId: id,
-            });
-            if (createImgProfile) {
-              return {
-                profileImageUrl: imageUrl,
-                location: "",
-              }
-            }
           }
         }
       },
