@@ -116,6 +116,9 @@ const Query = new GraphQLObjectType({
               calcObjIds.push(item.objectClId)
             }
           })
+          if(calcObjIds.length == 0) {
+            calcObjIds = [0]
+          }
           return db.models.objectCl.findAll({where: { id: {
             [Op.or]: calcObjIds
           }}})
