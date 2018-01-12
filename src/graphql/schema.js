@@ -3,6 +3,7 @@ import {
   GraphQLString,
   GraphQLSchema,
   GraphQLInt,
+  GraphQLFloat,
   GraphQLList,
   GraphQLNonNull,
 } from 'graphql';
@@ -13,6 +14,7 @@ import md5 from 'md5';
 import socialApi from '../api/socialApi'
 import PersonSchema from './schema/person'
 import ObjectSchema from './schema/object'
+const Op = db.Op;
 
 async function getMessage() {
   return {
@@ -42,6 +44,22 @@ const ObjectCl = ObjectSchema.ObjectCl
 const ObjectCategorie = ObjectSchema.ObjectCategorie
 const ObjectReview = ObjectSchema.ObjectReview
 
+function Deg2Rad (deg) {
+  return deg * Math.PI / 180;
+}
+
+function izracunajDistancu (lat1, lon1, lat2, lon2) {
+  lat1 = Deg2Rad(lat1)
+  lat2 = Deg2Rad(lat2)
+  lon1 = Deg2Rad(lon1)
+  lon2 = Deg2Rad(lon2)
+  const R = 6371
+  const x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2)
+  const y = (lat2 - lat1)
+  const d = Math.sqrt(x * x + y * y) * R
+  return d
+}
+
 
 // Root query.  This is our 'public API'.
 const Query = new GraphQLObjectType({
@@ -65,6 +83,43 @@ const Query = new GraphQLObjectType({
         resolve(root, args) {
           return db.models.person.findAll({ where: args });
         },
+      },
+      nearestObjects: {
+        type: new GraphQLList(ObjectCl),
+        args: {
+          lat: {
+            type: GraphQLFloat,
+          },
+          lng: {
+            type: GraphQLFloat,
+          },
+          distance: {
+            type: GraphQLFloat
+          },
+          categoryId: {
+            type: GraphQLInt
+          }
+        },
+        async resolve(root, args) {
+          const firstObjects = await db.models.objectCl.findAll({where: { objectCategoryId: args.categoryId }});
+          let objIds = [];
+          firstObjects.map(item => {
+            objIds.push(item.id)
+          })
+          const objectsLocation = await db.models.objectLocation.findAll({where: {objectClId: {
+            [Op.or]: objIds
+          }} })
+          let calcObjIds = []
+          objectsLocation.map(item =>{
+            let distance = izracunajDistancu(args.lat, args.lng, item.lat, item.lng)
+            if(distance < args.distance) {
+              calcObjIds.push(item.objectClId)
+            }
+          })
+          return db.models.objectCl.findAll({where: { id: {
+            [Op.or]: calcObjIds
+          }}})
+        }
       },
       objectCl: {
         type: new GraphQLList(ObjectCl),

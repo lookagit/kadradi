@@ -244,6 +244,58 @@ export const dataArr = {
           objectClId: 1,
           objectFileCategoryId: 4
         },
+      ],
+      ObjectLocation: [
+        {
+          lat: 44.766313,
+          lng: 20.368652,
+          objectClId: 1
+        },
+        {
+          lat: 44.789652,
+          lng: 20.433025,
+          objectClId: 2
+        },
+        {
+          lat: 44.814377,
+          lng: 20.495167,
+          objectClId: 3
+        },
+        {
+          lat: 44.826675,
+          lng: 20.410194,
+          objectClId: 4
+        },
+        {
+          lat: 44.851507,
+          lng: 20.375519,
+          objectClId: 5
+        },
+        {
+          lat: 44.820569,
+          lng: 20.291576,
+          objectClId: 6
+        },
+        {
+          lat: 44.760406,
+          lng: 20.412941,
+          objectClId: 7
+        },
+        {
+          lat: 44.737486,
+          lng: 20.380497,
+          objectClId: 8
+        },
+        {
+          lat: 44.784535,
+          lng: 20.486240,
+          objectClId: 9
+        },
+        {
+          lat: 44.806949,
+          lng: 20.554905,
+          objectClId: 10
+        },
       ]
 }
 

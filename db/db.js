@@ -186,6 +186,16 @@ const ObjectPhones = db.define('objectPhones', {
 
 ObjectPhones.belongsTo(ObjectInfo);
 
+const ObjectLocation = db.define('objectLocation', {
+  lat: {
+    type: Sequelize.FLOAT
+  },
+  lng: {
+    type: Sequelize.FLOAT
+  },
+})
+ObjectCl.hasOne(ObjectLocation)
+
 const ObjectAdditionalInfo = db.define('objectAdditionalInfo', {
   info: {
     type: Sequelize.STRING
@@ -303,7 +313,6 @@ FriendsList.belongsTo(Person, {
 });
 FriendsList.hasOne(FriendStatus);
 
-
 db.sync({force: false}).then(() => {
 
   // dataArr.PersonsArr.map(async item => {
@@ -337,7 +346,9 @@ db.sync({force: false}).then(() => {
   // dataArr.ObjectFiles.map(async item => {
   //   await ObjectFile.create(item)
   // })
-
+  // dataArr.ObjectLocation.map(async item => {
+  //   await ObjectLocation.create(item)
+  // })
 });
 
 
