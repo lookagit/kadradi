@@ -136,6 +136,12 @@ const ObjectCl = new GraphQLObjectType({
           async resolve(ObjectCl) {
             return await db.models.objectFile.findAll({where: {objectClId: ObjectCl.id}})
           }
+        },
+        objectLocations: {
+          type: new GraphQLList(objectLocation),
+          async resolve (ObjectCl) {
+            return await db.models.objectLocation.findAll({where: {objectClId: ObjectCl.id}})
+          }
         }
       }
     }
@@ -289,6 +295,27 @@ const ObjectCl = new GraphQLObjectType({
           type: ObjectCl,
           async resolve(ObjectReview) {
             return await db.models.objectCl.find({where: ObjectReview.objectClId})
+          }
+        }
+      }
+    }
+  })
+
+  const objectLocation = new GraphQLObjectType({
+    name: 'objectLocation',
+    description: 'Object location info',
+    fields() {
+      return {
+        lat: {
+          type: GraphQLFloat,
+          resolve(objectLocation) {
+            return objectLocation.lat
+          }
+        },
+        lng: {
+          type: GraphQLFloat,
+          resolve(objectLocation) {
+            return objectLocation.lng
           }
         }
       }
