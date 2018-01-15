@@ -70,7 +70,7 @@ const ObjectCl = new GraphQLObjectType({
           }
         },
         tags: {
-          type: new GraphQLList,
+          type: new GraphQLList(GraphQLString),
           resolve() {
             return [faker.random.lorem.word(), faker.random.lorem.word(), faker.random.lorem.word()]
           }
