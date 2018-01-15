@@ -45,6 +45,12 @@ const ObjectCl = new GraphQLObjectType({
             return ObjectCl.personId
           }
         },
+        workingTimeInfo: {
+          type: workingTimeInfo,
+          resolve(ObjectCl) {
+            return {isWorking: faker.random.boolean(), alwaysOpen: faker.random.boolean()}
+          }
+        },
         isWorking: {
           type: GraphQLBoolean,
           resolve() {
@@ -345,6 +351,28 @@ const ObjectCl = new GraphQLObjectType({
       }
     }
   })
+
+  const workingTimeInfo = new GraphQLObjectType({
+    name: 'workingTimeInfo',
+    description: 'Segzz',
+    fields() {
+      return {
+        isWorking: {
+          type: GraphQLBoolean,
+          resolve(workingTimeInfo) {
+            return workingTimeInfo.isWorking
+          }
+        },
+        alwaysOpen: {
+          type: GraphQLBoolean,
+          resolve(workingTimeInfo) {
+            return workingTimeInfo.alwaysOpen
+          }
+        }
+      }
+    }
+  })
+
 
   export default {
       ObjectCl,
