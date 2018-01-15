@@ -57,6 +57,24 @@ const ObjectCl = new GraphQLObjectType({
             return ObjectCl.objectCategoryId
           }
         },
+        favorites: {
+          type: GraphQLInt,
+          resolve() {
+            return faker.random.number({min: 1, max: 32})
+          }
+        },
+        checkedIn: {
+          type: GraphQLInt,
+          resolve() {
+            return faker.random.number({min: 1, max: 32})
+          }
+        },
+        tags: {
+          type: new GraphQLList,
+          resolve() {
+            return [faker.random.lorem.word(), faker.random.lorem.word(), faker.random.lorem.word()]
+          }
+        },
         avgRating: {
           type: GraphQLFloat,
           async resolve(ObjectCl) {
