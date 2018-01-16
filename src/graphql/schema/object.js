@@ -183,6 +183,180 @@ const ObjectCl = new GraphQLObjectType({
           return vreme
         }
       },
+      kitchenTimeInfo: {
+        type: kitchenTimeInfo,
+        async resolve(ObjectCl) {
+          const kitchenTime = await db.models.kitchenWorkTime.find({ where: { objectClId: ObjectCl.id } })
+          const monToFri = await db.models.objectWtMontoFri.find({ where: { id: kitchenTime.objectWtMontoFriId } })
+          const saturday = await db.models.objectWtSaturday.find({ where: { id: kitchenTime.objectWtSaturdayId } })
+          const sunday = await db.models.objectWtSunday.find({ where: { id: kitchenTime.objectWtSundayId } })
+          return { monToFri, saturday, sunday }
+        }
+      },
+      restaurantTimeInfo: {
+        type: restaurantTimeInfo,
+        async resolve(ObjectCl) {
+          const restaurantTime = await db.models.restaurantWorkTime.find({ where: { objectClId: ObjectCl.id } })
+          const monToFri = await db.models.objectWtMontoFri.find({ where: { id: restaurantTime.objectWtMontoFriId } })
+          const saturday = await db.models.objectWtSaturday.find({ where: { id: restaurantTime.objectWtSaturdayId } })
+          const sunday = await db.models.objectWtSunday.find({ where: { id: restaurantTime.objectWtSundayId } })
+          return { monToFri, saturday, sunday }
+        }
+      },
+      deliveryTimeInfo: {
+        type: deliveryTimeInfo,
+        async resolve(ObjectCl) {
+          const deliveryTime = await db.models.deliveryWorkTime.find({ where: { objectClId: ObjectCl.id } })
+          const monToFri = await db.models.objectWtMontoFri.find({ where: { id: deliveryTime.objectWtMontoFriId } })
+          const saturday = await db.models.objectWtSaturday.find({ where: { id: deliveryTime.objectWtSaturdayId } })
+          const sunday = await db.models.objectWtSunday.find({ where: { id: deliveryTime.objectWtSundayId } })
+          return { monToFri, saturday, sunday }
+        }
+      },
+    }
+  }
+})
+
+
+const monToFri = new GraphQLObjectType({
+  name: 'monToFri',
+  fields() {
+    return {
+      opening: {
+        type: GraphQLString,
+        resolve(monToFri) {
+          return monToFri.opening;
+        }
+      },
+      closing: {
+        type: GraphQLString,
+        resolve(monToFri) {
+          return monToFri.closing;
+        }
+      }
+    }
+  }
+})
+
+const saturday = new GraphQLObjectType({
+  name: 'saturday',
+  fields() {
+    return {
+      opening: {
+        type: GraphQLString,
+        resolve(saturday) {
+          return saturday.opening;
+        }
+      },
+      closing: {
+        type: GraphQLString,
+        resolve(saturday) {
+          return saturday.closing;
+        }
+      }
+    }
+  }
+})
+
+const sunday = new GraphQLObjectType({
+  name: 'sunday',
+  fields() {
+    return {
+      opening: {
+        type: GraphQLString,
+        resolve(sunday) {
+          return sunday.opening;
+        }
+      },
+      closing: {
+        type: GraphQLString,
+        resolve(sunday) {
+          return sunday.closing;
+        }
+      }
+    }
+  }
+})
+
+const kitchenTimeInfo = new GraphQLObjectType({
+  name: 'kitchenTimeInfo',
+  description: 'Diz kitchen is GAII',
+  fields() {
+    return {
+      monToFri: {
+        type: monToFri,
+        resolve(kitchenTimeInfo) {
+          return kitchenTimeInfo.monToFri
+        }
+      },
+      saturday: {
+        type: saturday,
+        resolve(kitchenTimeInfo) {
+          return kitchenTimeInfo.saturday
+        }
+      },
+      sunday: {
+        type: sunday,
+        resolve(kitchenTimeInfo) {
+          return kitchenTimeInfo.sunday
+        }
+      }
+    }
+  }
+})
+
+
+
+const restaurantTimeInfo = new GraphQLObjectType({
+  name: 'restaurantTimeInfo',
+  description: 'Diz restaurant is GAIIIIII',
+  fields() {
+    return {
+      monToFri: {
+        type: monToFri,
+        resolve(restaurantTimeInfo) {
+          return restaurantTimeInfo.monToFri
+        }
+      },
+      saturday: {
+        type: saturday,
+        resolve(restaurantTimeInfo) {
+          return restaurantTimeInfo.saturday
+        }
+      },
+      sunday: {
+        type: sunday,
+        resolve(restaurantTimeInfo) {
+          return restaurantTimeInfo.sunday
+        }
+      }
+    }
+  }
+})
+
+const deliveryTimeInfo = new GraphQLObjectType({
+  name: 'deliveryTimeInfo',
+  description: 'Diz delivery boy is cute',
+  fields() {
+    return {
+      monToFri: {
+        type: monToFri,
+        resolve(deliveryTimeInfo) {
+          return deliveryTimeInfo.monToFri
+        }
+      },
+      saturday: {
+        type: saturday,
+        resolve(deliveryTimeInfo) {
+          return deliveryTimeInfo.saturday
+        }
+      },
+      sunday: {
+        type: sunday,
+        resolve(deliveryTimeInfo) {
+          return deliveryTimeInfo.sunday
+        }
+      }
     }
   }
 })
@@ -198,12 +372,16 @@ const workingTimeInfo = new GraphQLObjectType({
           const dan = workingTimeInfo.danas.getDay();
           const vreme = Number(workingTimeInfo.danas.getHours().toString() + workingTimeInfo.danas.getMinutes().toString());
           let vremeRada;
+          console.log("Vreme sada: " + vreme)
           if (dan > 0 && dan < 6) {
             vremeRada = workingTimeInfo.monToFri;
+            console.log('Ponedeljak-Petak: ' + vremeRada.opening, vremeRada.closing)
           } else if (dan == 6) {
             vremeRada = workingTimeInfo.saturday;
+            console.log('Subota: ' + vremeRada.opening)
           } else if (dan == 0) {
             vremeRada = workingTimeInfo.sunday;
+            console.log('Nedelja: ' + vremeRada.opening)
           }
           if (vremeRada.opening > vremeRada.closing) {
             if (vremeRada.closing > vreme) {
@@ -226,67 +404,22 @@ const workingTimeInfo = new GraphQLObjectType({
         }
       },
       monToFri: {
-          type: new GraphQLObjectType({
-            name: 'monToFri',
-            fields() {
-              return {
-                opening: {
-                  type: GraphQLString,
-                  resolve(monToFri) {
-                    return monToFri.opening;
-                  }
-                },
-                closing: {
-                  type: GraphQLString,
-                  resolve(monToFri) {
-                    return monToFri.closing;
-                  }
-                }
-              }
-            }
-          })
+        type: monToFri,
+        resolve(workingTimeInfo) {
+          return workingTimeInfo.monToFri
+        }
       },
       saturday: {
-        type: new GraphQLObjectType({
-          name: 'saturday',
-          fields() {
-            return {
-              opening: {
-                type: GraphQLString,
-                resolve(saturday) {
-                  return saturday.opening;
-                }
-              },
-              closing: {
-                type: GraphQLString,
-                resolve(saturday) {
-                  return saturday.closing;
-                }
-              }
-            }
-          }
-        })
+        type: saturday,
+        resolve(workingTimeInfo) {
+          return workingTimeInfo.saturday
+        }
       },
       sunday: {
-        type: new GraphQLObjectType({
-          name: 'sunday',
-          fields() {
-            return {
-              opening: {
-                type: GraphQLString,
-                resolve(sunday) {
-                  return sunday.opening;
-                }
-              },
-              closing: {
-                type: GraphQLString,
-                resolve(sunday) {
-                  return sunday.closing;
-                }
-              }
-            }
-          }
-        })
+        type: sunday,
+        resolve(workingTimeInfo) {
+          return workingTimeInfo.sunday
+        }
       }
     }
   }

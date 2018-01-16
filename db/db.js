@@ -129,6 +129,15 @@ const ObjectCl = db.define('objectCl', {
   },
   avgRating: {
     type: Sequelize.INTEGER,
+  },
+  city: {
+    type: Sequelize.STRING,
+  },
+  streetAddress: {
+    type: Sequelize.STRING
+  },
+  postcode: {
+    type: Sequelize.STRING
   }
 });
 Person.hasOne(ObjectCl);
@@ -215,8 +224,17 @@ const ObjectWorkTime = db.define('objectWorkTime', {
     type: Sequelize.BOOLEAN
   }
 });
-
 ObjectWorkTime.belongsTo(ObjectCl);
+
+const KitchenWorkTime = db.define('kitchenWorkTime', {})
+KitchenWorkTime.belongsTo(ObjectCl);
+
+const RestaurantWorkTime = db.define('restaurantWorkTime',{});
+RestaurantWorkTime.belongsTo(ObjectCl)
+
+const DeliveryWorkTime = db.define('deliveryWorkTime', {})
+DeliveryWorkTime.belongsTo(ObjectCl)
+
 
 const ObjectWtMontoFri = db.define('objectWtMontoFri', {
   opening: {
@@ -227,6 +245,9 @@ const ObjectWtMontoFri = db.define('objectWtMontoFri', {
   }
 });
 ObjectWtMontoFri.hasOne(ObjectWorkTime);
+ObjectWtMontoFri.hasOne(KitchenWorkTime)
+ObjectWtMontoFri.hasOne(RestaurantWorkTime)
+ObjectWtMontoFri.hasOne(DeliveryWorkTime)
 
 const ObjectWtSaturday = db.define('objectWtSaturday', {
   opening: {
@@ -237,6 +258,10 @@ const ObjectWtSaturday = db.define('objectWtSaturday', {
   }
 });
 ObjectWtSaturday.hasOne(ObjectWorkTime);
+ObjectWtSaturday.hasOne(KitchenWorkTime)
+ObjectWtSaturday.hasOne(RestaurantWorkTime)
+ObjectWtSaturday.hasOne(DeliveryWorkTime)
+
 
 const ObjectWtSunday = db.define('objectWtSunday', {
   opening: {
@@ -247,6 +272,9 @@ const ObjectWtSunday = db.define('objectWtSunday', {
   }
 });
 ObjectWtSunday.hasOne(ObjectWorkTime);
+ObjectWtSunday.hasOne(KitchenWorkTime)
+ObjectWtSunday.hasOne(RestaurantWorkTime)
+ObjectWtSunday.hasOne(DeliveryWorkTime)
 
 const ObjectWtCustom = db.define('objectWtCustom', {
   opening: {
@@ -357,6 +385,15 @@ db.sync({force: false}).then(() => {
   // })
   // dataArr.ObjectWorkTime.map(async item => {
   //   await ObjectWorkTime.create(item)
+  // })
+  // dataArr.KitchenWorkTime.map(async item => {
+  //   await KitchenWorkTime.create(item)
+  // }),
+  // dataArr.RestaurantWorkTime.map(async item => {
+  //   await RestaurantWorkTime.create(item)
+  // })
+  // dataArr.DeliveryWorkTime.map(async item => {
+  //   await DeliveryWorkTime.create(item)
   // })
 });
 

@@ -7,7 +7,10 @@ export const dataArr = {
           shortDescription: faker.lorem.sentence(),
           personId: faker.random.number({min:1, max:3}),
           objectCategoryId: faker.random.number({min:1, max:5}),
-          avgRating: faker.random.number({min:0, max:5})
+          avgRating: faker.random.number({min:0, max:5}),
+          address: faker.address.street_name + ' ' + faker.random.number({min: 1, max: 20}).toString(),
+          postCode: faker.random.number({min: 1080, max: 12080}),
+          city: faker.address.city()
         }
       }),
       ReviewsArr: Array(40).fill().map(item => {
@@ -353,6 +356,27 @@ export const dataArr = {
           isAlwaysOpened: false,
           objectWtMontoFriId: 4
         },
+      ],
+      KitchenWorkTime: [
+        {
+          objectClId: 1,
+          objectWtMontoFriId: 3,
+          objectWtSaturdayId: 2
+        }
+      ],
+      RestaurantWorkTime: [
+        {
+          objectClId: 1,
+          objectWtMontoFriId: 3,
+          objectWtSaturdayId: 2
+        }
+      ],
+      DeliveryWorkTime: [
+        {
+          objectClId: 1,
+          objectWtMontoFriId: 3,
+          objectWtSaturdayId: 2
+        }
       ]
 }
 
