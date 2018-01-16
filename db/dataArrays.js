@@ -296,6 +296,63 @@ export const dataArr = {
           lng: 20.554905,
           objectClId: 10
         },
+      ],
+      ObjectWTMonToFri: [
+        {
+          opening: '0000',
+          closing: '2400'
+        },
+        {
+          opening: '0800',
+          closing: '1600'
+        },
+        {
+          opening: '0900',
+          closing: '1700'
+        },
+        {
+          opening: '0645',
+          closing: '2030'
+        },
+      ],
+      ObjectWTSaturday: [
+        {
+          opening: '0000',
+          closing: '2400'
+        },
+        {
+          opening: '1000',
+          closing: '1400'
+        },
+        {
+          opening: '0900',
+          closing: '1500'
+        }
+      ],
+      ObjectWorkTime: [
+        {
+          objectClId: 1,
+          isAlwaysOpened: true,
+          objectWtMontoFriId: 1,
+          objectWtSaturdayId: 1,
+        },
+        {
+          objectClId: 2,
+          isAlwaysOpened: false,
+          objectWtMontoFriId: 2,
+          objectWtSaturdayId: 2
+        },
+        {
+          objectClId: 3,
+          isAlwaysOpened: false,
+          objectWtMontoFriId: 3,
+          objectWtSaturdayId: 3
+        },
+        {
+          objectClId: 4,
+          isAlwaysOpened: false,
+          objectWtMontoFriId: 4
+        },
       ]
 }
 

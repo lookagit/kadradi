@@ -211,7 +211,7 @@ const ObjectRestaurantMenu = db.define('objectRestaurantMenu', {
 ObjectRestaurantMenu.belongsTo(ObjectInfo);
 
 const ObjectWorkTime = db.define('objectWorkTime', {
-  isAllwaysOpened: {
+  isAlwaysOpened: {
     type: Sequelize.BOOLEAN
   }
 });
@@ -348,6 +348,15 @@ db.sync({force: false}).then(() => {
   // })
   // dataArr.ObjectLocation.map(async item => {
   //   await ObjectLocation.create(item)
+  // })
+  // dataArr.ObjectWTMonToFri.map(async item => {
+  //   await ObjectWtMontoFri.create(item)
+  // })
+  // dataArr.ObjectWTSaturday.map(async item => {
+  //   await ObjectWtSaturday.create(item)
+  // })
+  // dataArr.ObjectWorkTime.map(async item => {
+  //   await ObjectWorkTime.create(item)
   // })
 });
 
