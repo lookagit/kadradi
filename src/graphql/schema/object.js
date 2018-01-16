@@ -596,6 +596,24 @@ const objectLocation = new GraphQLObjectType({
         resolve(objectLocation) {
           return objectLocation.lng
         }
+      },
+      city: {
+        type: GraphQLString,
+        resolve(objectLocation) {
+          return objectLocation.city
+        }
+      },
+      address: {
+        type: GraphQLString,
+        resolve(objectLocation) {
+          return objectLocation.address
+        }
+      },
+      zipCode: {
+        type: GraphQLString,
+        resolve(objectLocation) {
+          return objectLocation.zipCode
+        }
       }
     }
   }

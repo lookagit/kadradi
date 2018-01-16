@@ -162,15 +162,6 @@ Person.hasOne(ObjectReview);
 ObjectCl.hasOne(ObjectReview);
 
 const ObjectInfo = db.define('objectInfo', {
-  address: {
-    type: Sequelize.STRING,
-  },
-  city: {
-    type: Sequelize.STRING,
-  },
-  zipCode: {
-    type: Sequelize.STRING,
-  },
   websiteUrl: {
     type: Sequelize.STRING,
   },
@@ -201,6 +192,15 @@ const ObjectLocation = db.define('objectLocation', {
   },
   lng: {
     type: Sequelize.FLOAT
+  },
+  address: {
+    type: Sequelize.STRING,
+  },
+  city: {
+    type: Sequelize.STRING,
+  },
+  zipCode: {
+    type: Sequelize.STRING,
   },
 })
 ObjectCl.hasOne(ObjectLocation)

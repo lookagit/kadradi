@@ -252,12 +252,18 @@ export const dataArr = {
         {
           lat: 44.766313,
           lng: 20.368652,
-          objectClId: 1
+          objectClId: 1,
+          address: 'Kneza Mihaila 6',
+          city: 'Beograd',
+          zipCode: '11000'
         },
         {
           lat: 44.789652,
           lng: 20.433025,
-          objectClId: 2
+          objectClId: 2,
+          address: 'Bubanjska 1a',
+          city: 'Beograd',
+          zipCode: '11130'
         },
         {
           lat: 44.814377,
