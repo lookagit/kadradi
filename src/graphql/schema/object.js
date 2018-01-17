@@ -157,9 +157,10 @@ const ObjectCl = new GraphQLObjectType({
         }
       },
       objectLocations: {
-        type: new GraphQLList(objectLocation),
+        type: objectLocation,
         async resolve(ObjectCl) {
-          return await db.models.objectLocation.findAll({ where: { objectClId: ObjectCl.id } })
+          const objectLocation = await db.models.objectLocation.findAll({ where: { objectClId: ObjectCl.id } })
+          return objectLocation[0]
         }
       },
       distance: {
