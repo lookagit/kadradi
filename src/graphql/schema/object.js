@@ -688,5 +688,6 @@ export default {
   ObjectCl,
   ObjectCategorie,
   ObjectReview,
-  objectImages
+  objectImages,
+  objectInfo
 }

@@ -44,6 +44,7 @@ const ObjectCl = ObjectSchema.ObjectCl
 const ObjectCategorie = ObjectSchema.ObjectCategorie
 const ObjectReview = ObjectSchema.ObjectReview
 const objectImages = ObjectSchema.objectImages
+const objectInfo = ObjectSchema.objectInfo
 
 function Deg2Rad (deg) {
   return deg * Math.PI / 180;
@@ -221,6 +222,22 @@ const Query = new GraphQLObjectType({
         },
         async resolve(root, args) {
           return await db.models.objectFile.findAll({ where: { objectClId: args.objectClId } })
+        }
+      },
+      objectInfo: {
+        type: objectInfo,
+        args: {
+          objectClId: {
+            type: GraphQLInt
+          }
+        },
+        async resolve(root,args) {
+          const objectInfo = await db.models.objectInfo.find({where: {objectClId: args.objectClId}});
+          const objectPhones = await db.models.objectPhones.findAll({where: {objectInfoId: objectInfo.id}})
+          let vrati = objectInfo
+          vrati.ObjectPhones = objectPhones;
+          console.log(vrati.ObjectPhones, "OBJECT PHONEs")
+          return vrati
         }
       }
     };
