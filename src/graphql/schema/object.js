@@ -213,10 +213,74 @@ const ObjectCl = new GraphQLObjectType({
           return { monToFri, saturday, sunday }
         }
       },
+      objectInfo: {
+        type: objectInfo,
+        async resolve(ObjectCl) {
+          const objectInfo = await db.models.objectInfo.find({where: {objectClId: ObjectCl.id}});
+          const objectPhones = await db.models.objectPhones.findAll({where: {objectInfoId: objectInfo.id}})
+          let vrati = objectInfo
+          vrati.ObjectPhones = objectPhones;
+          console.log(vrati.ObjectPhones, "OBJECT PHONEs")
+          return vrati
+        }
+      }
     }
   }
 })
 
+const phone = new GraphQLObjectType({
+  name: 'phone',
+  description: 'Phone number of object',
+  fields() {
+    return {
+      desc: {
+        type: GraphQLString,
+        resolve(phone) {
+          return phone.desc
+        }
+      },
+      number: {
+        type: GraphQLString,
+        resolve(phone) {
+          return phone.number
+        }
+      }
+    }
+  }
+})
+
+const objectInfo = new GraphQLObjectType({
+  name: 'objectInfo',
+  description: 'Informations for ObjectCl',
+  fields() {
+    return {
+      websiteUrl: {
+        type: GraphQLString,
+        resolve(objectInfo) {
+          return objectInfo.websiteUrl
+        }
+      },
+      hasRestaurant: {
+        type: GraphQLBoolean, 
+        resolve(objectInfo) {
+          return objectInfo.hasRestaurant
+        }
+      },
+      popularBecauseOf: {
+        type: GraphQLString,
+        resolve(objectInfo) {
+          return objectInfo.popularBecauseOf
+        }
+      },
+      phone: {
+        type: new GraphQLList(phone),
+        resolve(objectInfo) {
+          return objectInfo.ObjectPhones
+        }
+      }
+    }
+  }
+})
 
 const monToFri = new GraphQLObjectType({
   name: 'monToFri',

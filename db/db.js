@@ -184,7 +184,7 @@ const ObjectPhones = db.define('objectPhones', {
   },
 });
 
-ObjectPhones.belongsTo(ObjectInfo);
+ObjectInfo.hasOne(ObjectPhones)
 
 const ObjectLocation = db.define('objectLocation', {
   lat: {
@@ -394,6 +394,12 @@ db.sync({force: false}).then(() => {
   // })
   // dataArr.DeliveryWorkTime.map(async item => {
   //   await DeliveryWorkTime.create(item)
+  // })
+  // dataArr.ObjectInfo.map(async item => {
+  //   await ObjectInfo.create(item)
+  // })
+  // dataArr.ObjectPhones.map(async item => {
+  //   await ObjectPhones.create(item)
   // })
 });
 

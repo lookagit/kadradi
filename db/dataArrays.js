@@ -383,6 +383,43 @@ export const dataArr = {
           objectWtMontoFriId: 3,
           objectWtSaturdayId: 2
         }
+      ],
+      ObjectInfo: [
+        {
+          objectClId: 1,
+          websiteUrl: 'https://restaurantindigo.com',
+          hasRestaurant: true,
+          popularBecauseOf: 'Prelep pogled na svet, Lepa trava u basti, Lepa trava u masti'
+        },
+        {
+          objectClId: 2,
+          websiteUrl: 'https://vaporwavecommunity.com',
+          hasRestaurant: false,
+          popularBecauseOf: 'Premium nargile, Dolazi bajaga ponekad'
+        },
+        {
+          objectClId: 3,
+          websiteUrl: 'https://whenlifegivesyoulemons.ninja',
+          hasRestaurant: true,
+          popularBecauseOf: 'U srednjoj bacio trojku iza glave preko pola terena'
+        },
+      ],
+      ObjectPhones: [
+        {
+          objectInfoId: 1,
+          desc: 'Fiksni',
+          number: '+381114578952'
+        },
+        {
+          objectInfoId: 1,
+          desc: 'Mobilni',
+          number: '+381653264129'
+        },
+        {
+          objectInfoId: 2,
+          desc: 'Hala',
+          number: '+381115252545'
+        }
       ]
 }
 
