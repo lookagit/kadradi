@@ -687,5 +687,6 @@ const objectLocation = new GraphQLObjectType({
 export default {
   ObjectCl,
   ObjectCategorie,
-  ObjectReview
+  ObjectReview,
+  objectImages
 }

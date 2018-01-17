@@ -43,6 +43,7 @@ const FriendsList = PersonSchema.FriendsList
 const ObjectCl = ObjectSchema.ObjectCl
 const ObjectCategorie = ObjectSchema.ObjectCategorie
 const ObjectReview = ObjectSchema.ObjectReview
+const objectImages = ObjectSchema.objectImages
 
 function Deg2Rad (deg) {
   return deg * Math.PI / 180;
@@ -209,6 +210,17 @@ const Query = new GraphQLObjectType({
         },
         resolve(root, args) {
           return db.models.objectReview.findAll({ where: args })
+        }
+      },
+      objectImages: {
+        type: objectImages,
+        args: {
+          objectClId: {
+            type: GraphQLInt
+          }
+        },
+        async resolve(root, args) {
+          return await db.models.objectFile.findAll({ where: { objectClId: args.objectClId } })
         }
       }
     };
